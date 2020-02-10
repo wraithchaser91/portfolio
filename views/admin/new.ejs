@@ -1,0 +1,22 @@
+<div id="mainContainer" class="flex-column">
+    <h1>New Website Model</h1>
+    <% if(typeof message != "undefined"){ %>
+        <h4 class="error"><%= message %></h4>
+    <% } %>  
+    <form action="/admin/new" method="POST" id="newSiteForm">
+        <%- include("../partials/formPartials/form_fields") %>
+    </form>
+</div>
+<script src="/js/list.js"></script>
+<script src="/js/listInput.js"></script>
+<script src="/js/forms.js"></script>
+<script src="/js/colourPicker.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pikaday/pikaday.js"></script>
+<script>
+    ///Setting up the date picker
+    let picker = new Pikaday(
+        {
+            field:document.getElementById("liveDate"),
+        });
+    picker.setDate(new Date());
+</script>

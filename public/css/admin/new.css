@@ -1,0 +1,178 @@
+#newSiteForm{
+    height:70%;
+    top:10%;
+}
+
+#newSiteForm .flex-row .flex-column{
+    margin: 0 1vw;
+    flex:1;
+}
+
+#newSiteForm label{
+    margin-top:1vh;
+}
+
+.holder{
+    min-height:3vh;
+    width:10vw;
+    background-color: white;
+    border:1px solid #0004;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.list{
+    transform-origin: top;
+    position: absolute;
+    bottom: 0%;
+    transform: translateY(100%) scaleY(0);
+    transition: 0.3s;
+    min-height:3vh;
+    max-height:30vh;
+    width:150px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    z-index: 90;
+    background-color: #ccc;
+    border-radius: 0 0 8px 8px;
+    border: 1px solid #0004;
+    text-align: center;
+}
+
+.list::-webkit-scrollbar-track{
+    box-shadow: 0 0 6px #0000;
+}
+
+.list::-webkit-scrollbar-thumb{
+    background-image: linear-gradient(105deg, var(--mainColour) 0%, var(--subColour) 100%);
+    border-radius: 10px;
+}
+
+#listRow{
+    align-items: flex-start;
+}
+
+.list h3, .holder h3{
+    color: black;
+    font-size: 0.6em;
+    padding:5px;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+.list h3{
+    width:80%;
+    margin:0 10%;
+}
+
+.list h3:hover, .holder h3:hover{
+    color:var(--mainColour);
+    background-color: #aaa4;
+    filter:hue-rotate(180deg);
+}
+
+.newDiv{
+    transform-origin: middle;
+    transition:0.3s;
+    transform: scaleY(0);
+}
+.newLabel{
+    color:white;
+    cursor: pointer;
+    transition: transform 0.3s;
+    transform:translateY(150%);
+}
+
+#newGroupLabel{
+    transform: translateY(200%);
+}
+
+.newButton{
+    position: absolute;
+    font-size: 4em;
+    transform:scale(0.3, 0.35) translateX(-160%) translateY(-120%);
+    left:0;
+    top:0;
+    border-radius: 50%;
+    width:6vw;
+    border:none;
+}
+
+.selectRow{
+    width: 100%;
+    margin-top: -2vh;
+}
+
+.selectRow .flex-column select{
+    min-width:190px;
+}
+
+#liveDate{
+    cursor: pointer;
+}
+
+#saveButton, .backButton{
+    border:none;
+    cursor: pointer;
+    min-width:4vw;
+    margin-bottom:2vh;
+}
+
+#imageRow{
+    margin-bottom:3vh;
+}
+
+#imageRow .formSelector{
+    cursor: pointer;
+    max-width: 3%;
+    margin: 0 1vw;
+}
+
+#groupRow{
+    margin-top: -2vh;
+    transition: 0.3s;
+    transform-origin: top;
+    transform: scaleY(0);
+    z-index: 5;
+}
+
+#groupRow #newGroupColumn{
+    margin: 2vh 1vw 0;
+}
+
+#dateRow{
+    margin-top:-7vh;
+    transition: 0.3s;
+}
+
+h2{
+    font-size: 1.3em;
+    font-weight: lighter;
+    margin-bottom: 2vh;
+}
+
+h3{
+    font-size: 1em;
+    font-weight: lighter;
+}
+
+#primaryHeader, #secondaryHeader{
+    font-weight: lighter;
+    margin:-0.8vh 0 2vh;
+    font-size: 1.3em;
+    border:1px solid #8888;
+    padding: 5px 10px;
+    background-color: #23232344;
+    border-radius: 8px;
+    min-height:45px;
+}
+
+#fileName{
+    background-color: #888;
+    border: 1px solid #888;
+}

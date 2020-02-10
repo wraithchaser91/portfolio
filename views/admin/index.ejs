@@ -1,0 +1,16 @@
+<div id="mainContainer" class="flex-column">
+    <h1>Admin Panel</h1>
+    <a href="/admin/new" class="glowing" id="mainLink">Create New Wesbite Model</a>
+    <h3 class="subTitle" >Existing Sites</h3>
+    <div id="websiteHolder" class="flex-row">
+        <% websites.forEach(item=>{%>
+            <div class="websiteTemplate flex-column">
+                <h3><%= item.name %></h3>
+                <div class="flex-row">
+                    <a href="<%= `admin/update/${item.id}` %>" class="reverseAnchor">Update</a>
+                    <span class="siteDraft"></span>
+                </div>
+            </div>
+        <%})%>
+    </div>
+</div>

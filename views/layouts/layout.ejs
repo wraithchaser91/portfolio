@@ -4,9 +4,51 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Portfolio <%= (typeof website != "undefined"?`| ${website.name}`:"") %></title>
+    
+    <link rel="icon" href="/images/siteIcon.png" sizes="16x16" type="image/png">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/pikaday/css/pikaday.css">
+    <% if(typeof fonts != "undefined"){%>
+        <%fonts.forEach(item =>{%>
+            <link href="<%=`https://fonts.googleapis.com/css?family=${item}&display=swap`%>" rel="stylesheet">
+        <%})%>    
+    <%}else{%>
+        <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+    <%}%>
+    <% if(typeof css != "undefined") {%>
+        <% if(typeof css === "string"){ %>
+            <link rel="stylesheet" href="<%= `/css/${css}.css` %>">
+        <%}else{%>
+            <%css.forEach(item=>{%>
+                <link rel="stylesheet" href="<%= `/css/${item}.css` %>">
+            <%})%>
+        <%}%>
+    <%}else{%>
+        <link rel="stylesheet" href="/css/main.css">
+    <%}%>
+
+    <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
+    <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet">
 </head>
 <body>
+    <script>let reqs = [];</script>
     <%- body %>
+    <script src="https://unpkg.com/filepond-plugin-file-encode/dist/filepond-plugin-file-encode.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
+    <script src="https://unpkg.com/filepond/dist/filepond.js"></script>
+    <script src="/js/filePond.js"></script>
+    <script>
+        setTimeout(()=>{
+            let list = document.getElementsByClassName("error");
+            for(let item of list){
+                item.style.transform = "scaleY(0)";
+            }
+        },3500)
+        window.onload = () =>{
+            for(let req of reqs){
+                req.send();
+            }
+        }
+    </script>
 </body>
 </html>

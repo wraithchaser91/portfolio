@@ -1,0 +1,50 @@
+<div class="flex-column absColumn">
+    <div class="flex-row">
+        <div class="flex-column"><label for="name">Hotel Name</label><input type="text" name="name" value="<%= (typeof website != "undefined"?website.name:"") %>" id="hotelName" required></div>
+        <div class="flex-column"><label for="url">Site URL</label><input type="text" name="url" value="<%= (typeof website != "undefined"?website.url:"") %>" required></div>
+    </div>
+    <div class="flex-row" id="listRow">
+        <div class="flex-column"><label>Page List</label><%- include("../list_elements") %></div>
+        <div class="flex-column"><label>Feature List</label><%- include("../list_elements") %></div>
+    </div>
+    <div class="flex-row">
+        <div class="flex-column"><label class="newLabel">Add New Page</label><%- include("../new_elements") %></div>
+        <div class="flex-column"><label class="newLabel">Add New Feature</label><%- include("../new_elements") %></div>
+    </div>
+    <div class="flex-row selectRow">
+        <div class="flex-column">
+            <label for="howItWasMade">How It Was Made</label>
+            <% let howList = ["Wordpress", "Custom Built"] %>
+            <select name="howItWasMade">
+                <% for(let item of howList){ %>
+                    <% if(typeof website != "undefined" && website.howItWasMade==item){ %>
+                        <option value="<%= item %>" selected="selected"><%= item %></option>
+                    <% }else{ %>  
+                        <option value="<%= item %>"><%= item %></option>
+                    <% } %> 
+                <% } %>
+            </select>
+        </div>
+        <div class="flex-column">
+            <label for="type">Type Of Site</label>
+            <% let typeList = ["Single Site", "Multi Site", "Group Site", "Landing Page"] %>
+            <select name="type" id="typeSelect">
+                <% for(let item of typeList){ %>
+                    <% if(typeof website != "undefined" && website.type==item){ %>
+                        <option value="<%= item %>" selected="selected"><%= item %></option>
+                    <% }else{ %>  
+                        <option value="<%= item %>"><%= item %></option>
+                    <% } %> 
+                <% } %>
+            </select>
+        </div>
+    </div>
+    <div class="flex-row" id="groupRow">
+        <div class="flex-column" id="newGroupColumn"><label class="newLabel" id="newGroupLabel">Add New Group</label><%- include("../new_elements") %></div>
+        <div class="flex-column"><label>Group Name</label><%- include("../list_elements") %></div>
+    </div>
+    <div class="flex-row" id="dateRow">
+        <div class="flex-column"><label for="fileName">File Name</label><input type="text" name="fileName" value="<%= (typeof website != "undefined"?website.fileName:"") %>" id="fileName" required autocomplete="off"></div>
+        <div class="flex-column"><label for="liveDate">Live Date</label><input type="text" name="liveDate" value="<%= (typeof website != "undefined"?website.liveDate:"") %>" id="liveDate" readonly></div>
+    </div>
+</div>

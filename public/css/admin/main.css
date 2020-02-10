@@ -1,0 +1,256 @@
+:root{
+    --border-radius: 20px;
+    --mainColour: #ff5858;
+    --subColour: #f09819;
+}
+
+*, *::before, *::after{
+    margin:0;
+    padding:0;
+    box-sizing: border-box;
+}
+
+::selection{
+    background-color: var(--mainColour);
+    color:white;
+}
+
+body{
+    width: 100vw;
+    height:100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #232323;
+    position: relative;
+    font-family: 'Raleway', sans-serif;
+    color:white;
+    overflow-x: hidden;
+}
+
+body::before{
+    content:'';
+    position: absolute;
+    width: 100%;
+    height:100%;
+    background-image: url("/images/aurora.jpg");
+    background-repeat: no-repeat;
+    background-position: bottom;
+    background-size: cover;
+    z-index: -1;
+    filter:blur(5px) brightness(0.2);
+}
+
+.flex-column{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.flex-row{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width:100%;
+}
+
+::-webkit-scrollbar{
+    width: 0.3em;
+  }
+
+::-webkit-scrollbar-track {
+    box-shadow: 0 0 6px black;
+}
+   
+::-webkit-scrollbar-thumb{
+    background-image: linear-gradient(105deg, #fff 0%, #888 100%);
+}
+
+#mainContainer{
+    width: 80vw;
+    height: 80vh;
+    position: relative;
+    justify-content: flex-start;
+}
+
+#mainContainer h1{
+    margin-bottom:5vh;
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    position: absolute; 
+    width:100%;
+}
+
+form input, form select{
+    padding:0.5vh 0.4vw;
+    margin-bottom:2vh;
+    border-radius: 8px;
+    text-align: center;
+    text-align-last: center;
+}
+
+form input:focus, form select:focus{
+    outline:none;
+}
+
+form label{
+    margin-bottom:0.3vh;
+    font-size: 0.6em;
+    color: var(--mainColour);
+    text-align: center;
+}
+
+form select{
+    cursor: pointer;
+}
+
+button, a{
+    color:white;
+    text-decoration: none;
+    font-family: 'Raleway', sans-serif;
+    background-color: var(--mainColour);
+    padding:8px;
+    border-radius: 8px;
+    position: relative;
+    margin: 0 0.5vw;
+    text-align: center;
+    font-size: 0.8em;
+}
+
+.reverseAnchor{
+    filter: hue-rotate(180deg);
+}
+
+.reverseAnchor:hover{
+    color:black;
+}
+
+form button:hover{
+    filter: hue-rotate(180deg);
+}
+
+a:hover{
+    filter:hue-rotate(180deg);
+}
+
+#mainLink{
+    margin-bottom:5vh;
+}
+
+.glowing::before{
+    content:'';
+    position: absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    background-color: inherit;
+    filter: blur(7px);
+    z-index:-1;
+}
+
+.subTitle{
+    margin-bottom:3vh;
+    font-weight: lighter;
+}
+
+#websiteHolder{
+    width:80%
+}
+
+.websiteTemplate{
+    min-width: 15%;
+    background-color: #2223;
+    margin:1vh 1vw;
+    border-radius: 8px;
+    padding:1% 2%;
+}
+
+.websiteTemplate .flex-row{
+    width: 100%;
+}
+
+.websiteTemplate h3{
+    font-size:0.9em;
+    margin-bottom: 1vh;
+    font-weight: lighter;
+    color: var(--mainColour);
+}
+
+.websiteTemplate a{
+    margin: 0 0.5vw;
+    font-size: 0.8em;
+}
+
+.websiteTemplate span{
+    width:15px;
+    height:15px;
+    background-color: white;
+    border-radius: 50%;
+}
+
+.websiteTemplate .siteActive{
+    background-color: #0f0;
+}
+
+.websiteTemplate .siteDraft{
+    background-color: #ff0;
+}
+
+.websiteTemplate .siteInactive{
+    background-color: #f00;
+}
+
+.error{
+    color: red;
+    font-size: 0.7em;
+    font-weight: lighter;
+    margin-top: -4vh;
+}
+
+.filepond{
+    width:100%;
+    height:150px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.parentColourRow .flex-column,
+.parentColourRow .flex-row{
+    flex: unset !important;
+}
+
+.colourRow{
+    border:1px solid black;
+    width:88px;
+    height:88px;
+    cursor: crosshair;
+}
+.colourRow span{
+    width:1px;
+    height:1px;
+    background-color: white;
+}
+.colourCheck{
+    height:10px;
+    width: 33%;
+    margin-bottom:1vh;
+}
+.colourDrop{
+    width:50px;
+    height:50px;
+    background-color:white;
+    margin:0 0.5vw;
+    border-radius: 10px;
+}

@@ -1,0 +1,23 @@
+<div id="mainContainer" class="flex-column">
+    <h1>Update Website Model</h1>
+    <form action="<%= `/admin/update/${website.id}` %>" method="POST" id="newSiteForm">
+        <%- include("../partials/formPartials/form_fields") %>
+    </form>
+</div>
+<script>
+    document.getElementById("fileName").readOnly = true;
+    document.getElementById("fileName").style.cursor = "not-allowed";
+</script>
+<script src="/js/list.js"></script>
+<script src="/js/listInput.js"></script>
+<script src="/js/forms.js"></script>
+<script src="/js/colourPicker.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pikaday/pikaday.js"></script>
+<script>
+    ///Setting up the date picker
+    let picker = new Pikaday(
+        {
+            field:document.getElementById("liveDate"),
+        });
+    picker.setDate(new Date(document.getElementById("liveDate").value));
+</script>

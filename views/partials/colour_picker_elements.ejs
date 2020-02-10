@@ -1,0 +1,18 @@
+<div class="flex-row parentColourRow">
+    <div class="flex-column">
+        <label>Use the mouse wheel to rotate</label>
+        <div class="flex-column colourRow">
+            <% for(let i = 0; i < 256/3; i++){%>
+                <div class="flex-row">
+                <% for(let j = 0; j < 256/3; j++){ %>
+                        <span></span>
+                <%}%>
+                </div>
+            <%}%>
+        </div>
+        <span class="colourCheck"></span>
+    </div>
+    <div class="flex-column">
+        <span class="colourDrop"></span>
+    </div>
+</div>
