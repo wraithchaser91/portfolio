@@ -8,12 +8,15 @@ router.get("/", async(req, res)=>{
     let website;
     let siteCSS = "";
     try{
-        website = await Website.findById(id);
+        console.log("trying to find website");
+        const websites = await Website.find({});
+        console.log("website found")
+        website = websites[0];
         siteCSS = `sites/${website.fileName}`;
     }catch(e){
         errorLog(e);
     }
-    res.render("index", {css:["main", siteCSS], website, fonts});
+    res.render("index", {css:["admin/main", siteCSS], website, fonts});
 });
 
 errorLog = error => console.log("ERROR in INDEX: " + error); 

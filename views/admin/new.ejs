@@ -3,7 +3,7 @@
     <% if(typeof message != "undefined"){ %>
         <h4 class="error"><%= message %></h4>
     <% } %>  
-    <form action="/admin/new" method="POST" id="newSiteForm">
+    <form action="/admin/new" method="POST" enctype="multipart/form-data" id="newSiteForm">
         <%- include("../partials/formPartials/form_fields") %>
     </form>
 </div>

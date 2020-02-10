@@ -3,6 +3,17 @@ const router = express.Router();
 const Website = require("../models/Website");
 const CSS = require("../models/CSS");
 const Preferences = require("../models/Preferences");
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
+const uploadPath = path.join('public', 'images/sites');
+const imageMimeTypes = ['image/jpeg', 'image/png', 'images/gif'];
+const upload = multer({
+  dest: uploadPath,
+  fileFilter: (req, file, callback) => {
+    callback(null, imageMimeTypes.includes(file.mimetype))
+  }
+})
 let fonts = ["Raleway","Italianno","Lobster"];
 
 router.get("/login", async(req,res)=>{
@@ -23,8 +34,8 @@ router.get("/new", (req, res)=>{
     res.render("admin/new", {css:["/admin/main","/admin/new"], fonts});
 });
 
-let fs = require("fs").promises;
-router.post("/new", async(req, res)=>{
+router.post("/new", upload.single('desktopImage'), async(req, res)=>{
+    console.log(req.file);
     try{
         let isName = true;
         let test = await Website.findOne({name:req.body.name});
@@ -80,7 +91,8 @@ router.post("/update/:id", async(req,res) =>{
 
 let groupActiveOn = ["Multi Site", "Group Site", "Landing Page"];
 createWebsite = body =>{
-    imageDetails = getImageDetails([body.desktopImage,body.tabletImage, body.mobileImage, body.backgroundImage]);
+    let imageDetails = getImageDetails([body.desktopImage,body.tabletImage, body.mobileImage, body.backgroundImage]);
+     imageDetails = [[],[]];
     let website = new Website({
         name: body.name,
         url: body.url,
@@ -113,7 +125,7 @@ updateSite = (site, body) =>{
         site.group = body.group;
     }
     addFiles(site.pageList, site.featureList, (groupActiveOn.includes(body.type)?site.group:null));
-    imageDetails = getImageDetails([body.desktopImage,body.tabletImage, body.mobileImage, body.backgroundImage]);
+    let imageDetails = getImageDetails([body.desktopImage,body.tabletImage, body.mobileImage, body.backgroundImage]);
     site.images = imageDetails[0];
     site.imageTypes = imageDetails[1];
 
@@ -179,6 +191,7 @@ getImageDetails = files =>{
 
 
 createCSS = (cssModel) =>{
+    return "";
     let cssArray = cssModel.element;
     let css ="";
     for(let ele of cssArray){
@@ -193,9 +206,11 @@ createCSS = (cssModel) =>{
     return css;
 }
 
+// let fs = require("fs").promises;
 saveCSS = async(website,css)=> {
+    return;
     try{
-        await fs.writeFile(`../Portfolio/public/css/sites/${website.fileName}.css`, createCSS(css));
+        await fs.promises.writeFile(`../Portfolio/public/css/sites/${website.fileName}.css`, createCSS(css)); //TODO almost definitely fucked
     }catch(e){
         errorLog(e);
     }
