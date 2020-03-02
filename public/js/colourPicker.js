@@ -14,9 +14,7 @@ class ColourPicker{
         this.check = check;
         this.drop = drop;
         this.rotate = 0;
-        this.set(r,g,b);
-        this.drop.style.backgroundColor = this.toString();
-        this.check.style.backgroundColor = this.toString();
+        this.changeColour(r,g,b);
         this.isClicked = false;
         this.addListeners();
     }
@@ -25,7 +23,7 @@ class ColourPicker{
         let green = 0;
         let blue = 255;
         let threshold = 255;
-        let amount = 3;
+        let amount = 5;
         this.pixels = [];
         for(let i = 0; i < this.list.length; i++){
             this.pixels.push(new Pixel(red,green,blue));
@@ -112,6 +110,11 @@ class ColourPicker{
         this.rotate+=amount;
         this.row.style.filter = `hue-rotate(${this.rotate}deg)`;
     }
+    changeColour(r, g, b){
+        this.set(r,g,b);
+        this.drop.style.backgroundColor = this.toString();
+        this.check.style.backgroundColor = this.toString();
+    }
 }
 
 let colourRows = document.getElementsByClassName("colourRow");
@@ -125,4 +128,77 @@ let colourDrops = document.getElementsByClassName("colourDrop");
 let colourPickers = [];
 for(let i = 0; i < colourRows.length; i++){
     colourPickers.push(new ColourPicker(colourRows[i],colourSpans[i],colourChecks[i],colourDrops[i], 66, 192, 220));
+}
+
+let colourColumns = document.getElementsByClassName("parentColourColumn");
+let hexColumns = document.getElementsByClassName("hexColumn");
+let colourPickerChoices = [0,0];
+let colourChangeButtons = document.getElementsByClassName("colourChoice");
+for(let i = 0; i < colourChangeButtons.length; i++){
+    colourChangeButtons[i].addEventListener("click", (e)=>{
+        if(colourPickerChoices[i] == 0){
+            colourColumns[i].style.transform = "rotateY(90deg)";
+            hexColumns[i].style.transform = "rotateY(0deg)";
+            colourChangeButtons[i].textContent = "Change to Picker"
+            colourPickerChoices[i] = 1;
+        }else if(colourPickerChoices[i] == 1){
+            colourColumns[i].style.transform = "rotateY(0deg)";
+            hexColumns[i].style.transform = "rotateY(-90deg)";
+            colourChangeButtons[i].textContent = "Change to Hex"
+            colourPickerChoices[i] = 0;
+        }
+        return;
+    });
+}
+
+let hexInputs = document.getElementsByClassName("hexInput");
+for(let i = 0; i < hexInputs.length; i++){
+    hexInputs[i].addEventListener("change", ()=>computeHex(i, hexInputs[i].value));
+    hexInputs[i].addEventListener("keydown", (e)=>{
+        if(e.key === "Enter"){
+            e.preventDefault();
+            computeHex(i, hexInputs[i].value);
+        }
+    });
+}
+
+findHexValue = value =>{
+    let primary = value[0];
+    let secondary = value[1];
+    if(isNaN(primary)){
+        primary = primary.toLowerCase();
+        if(primary == "a")primary = 10;
+        else if(primary == "b")primary = 11;
+        else if(primary == "c")primary = 12;
+        else if(primary == "d")primary = 13;
+        else if(primary == "e")primary = 14;
+        else if(primary == "f")primary = 15;
+        else return -1;
+    }
+    if(isNaN(secondary)){
+        secondary = secondary.toLowerCase();
+        if(secondary == "a")secondary = 10;
+        else if(secondary == "b")secondary = 11;
+        else if(secondary == "c")secondary = 12;
+        else if(secondary == "d")secondary = 13;
+        else if(secondary == "e")secondary = 14;
+        else if(secondary == "f")secondary = 15;
+        else return -1;
+    }
+    return parseInt(primary)*16 + parseInt(secondary);
+}
+
+computeHex = (index, value) =>{
+    value = value.trim();
+    if(value == "")return;
+    value = value.replace("#","");
+    if(value.length != 6)return;
+    let r = findHexValue(value.substring(0,2));
+    if(r == -1)return;
+    let g = findHexValue(value.substring(2,4));
+    if(g == -1)return;
+    let b = findHexValue(value.substring(4,6));
+    if(b == -1)return;
+
+    colourPickers[index].changeColour(r,g,b);
 }

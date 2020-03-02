@@ -29,7 +29,7 @@ router.get("/data/:type", async(req, res)=>{
         }
     }catch(e){
         errorLog(e);
-        res.redirect("/admin");
+        res.redirect("/admin");//Redirect to 404 page - Content not found
     }
     res.send(data);
 });
@@ -52,9 +52,9 @@ router.get("/data/website/:type/:name", async(req, res)=>{
                 case "group":
                     data = site.group;
                     break;
-                case "images":
-                    data = JSON.stringify(site.imagePath);
-                    break;
+                case "cssValues":
+                    data = JSON.stringify(getCSSValues(site));
+                        break;
                 default:
                     errorLog(`Could not find data for type:${req.params.type}`);
                     res.redirect("/admin");
@@ -62,10 +62,14 @@ router.get("/data/website/:type/:name", async(req, res)=>{
         }
     }catch(e){
         errorLog(e);
-        res.redirect("/admin");
+        res.redirect("/admin");//Redirect to 404 page - Content not found
     }
     res.send(data);
 });
+
+getCSSValues = site =>{
+    return [site.primaryFont, site.secondaryFont, site.primaryColour, site.secondaryColour];
+}
 
 errorLog = error => console.log("ERROR in AJAX: "+error);
 

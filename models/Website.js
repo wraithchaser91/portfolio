@@ -38,31 +38,31 @@ const websiteSchema = new mongoose.Schema({
         default: undefined,
         required: true
     },
-    images:{
-        type:[Buffer],
-        default: undefined,
-        required: true
-    },
-    imageTypes:{
+    imageFileNames:{
         type:[String],
         default: undefined,
         required: true
     },
-    css:{
-        type:mongoose.Schema.Types.ObjectId,
-        required: true,
-        ref: "CSS"
-    }
+    state:{
+        type: Number,
+        required: true
+    },
+    primaryFont:{
+        type: String,
+        required: true
+    },
+    secondaryFont:{
+        type: String,
+        required: true
+    },
+    primaryColour:{
+        type: String,
+        required: true
+    },
+    secondaryColour:{
+        type: String,
+        required: true
+    },
 });
-
-websiteSchema.virtual('imagePath').get(function() {
-    if (this.images != null && this.imageTypes != null) {
-        let list = [];
-        for(let i = 0; i < this.images.length; i++){
-            list.push(`data:${this.imageTypes[i]};charset=utf-8;base64,${this.images[i].toString('base64')}`);
-        }
-      return list;
-    }
-})
 
 module.exports = mongoose.model("Website", websiteSchema);

@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const Website = require("../models/Website");
-const CSS = require("../models/CSS");
 const Preferences = require("../models/Preferences");
 const multer = require('multer');
 const path = require('path');
@@ -15,6 +14,11 @@ const upload = multer({
   }
 })
 let fonts = ["Raleway","Italianno","Lobster"];
+let imageNameFields = ["desktopImage", "tabletImage", "mobileImage", "backgroundImage"];
+let imageArrayFields = [];
+for(let imageName of imageNameFields){
+    imageArrayFields.push({name: imageName});
+}
 
 router.get("/login", async(req,res)=>{
     //will be used to verify user credentials
@@ -34,8 +38,9 @@ router.get("/new", (req, res)=>{
     res.render("admin/new", {css:["/admin/main","/admin/new"], fonts});
 });
 
-router.post("/new", upload.single('desktopImage'), async(req, res)=>{
-    console.log(req.file);
+router.post("/new", upload.fields(imageArrayFields), async(req, res)=>{
+    let fileNames = getFileNames(req.files);
+    let website;
     try{
         let isName = true;
         let test = await Website.findOne({name:req.body.name});
@@ -43,24 +48,21 @@ router.post("/new", upload.single('desktopImage'), async(req, res)=>{
             test = await Website.findOne({fileName:req.body.fileName});
             isName = false;
         }
-        let website = createWebsite(req.body);
-        let cssStylesArray = req.body.cssStyles;
-        let css = new CSS({
-            element: [`root,--mainColour:red;`]
-        });
-        website.css = css;
+        website = createWebsite(req.body);
+        website.imageFileNames = fileNames;
         if(test){
+            removeFileNames(fileNames);
             res.render("admin/new", {css:["/admin/main", "/admin/new"], website, message:`A model with the same ${(isName?'hotel':'file')} name already exists`, fonts});
             return;
         }else{
-            await css.save();
             await website.save();
-            await saveCSS(website,css);
+            await saveCSS(website);
         }
     }catch(error){
+        removeFileNames(fileNames);
         errorLog(error);
     }
-    res.redirect("/admin");
+    res.redirect(`/admin`);
 });
 
 router.get("/update/:id", async(req,res) =>{
@@ -75,24 +77,72 @@ router.get("/update/:id", async(req,res) =>{
 
 router.post("/update/:id", async(req,res) =>{
     try{
-        let website = await Website.findById(req.params.id).populate("css").exec();
-        let css = website.css;
-        let cssStylesArray = JSON.parse(req.body.cssArray);
-        css.element = [`:root^--mainColour:${cssStylesArray[2]};--secondaryColour:${cssStylesArray[3]}`];
+        let website = await Website.findById(req.params.id);
         website = updateSite(website, req.body);
-        await css.save();
         await website.save();
-        await saveCSS(website,css);
+        await saveCSS(website);
     }catch(e){
         errorLog(e);
     }
     res.redirect("/admin");
 });
 
+router.get("/update/state/:id", async(req, res) =>{
+    if(!req.query.state || req.query.state == ""){
+        res.redirect("/admin");
+    }
+    try{
+        let website = await Website.findById(req.params.id);
+        website.state = req.query.state;
+        await website.save();
+    }catch(e){
+        errorLog(e);
+    }
+    res.redirect("/admin");
+});
+
+router.get("/updateImages/:id", async(req,res) =>{
+    try{
+        const website = await Website.findById(req.params.id);;
+        res.render("admin/updateImages", {css:["admin/main", "admin/new"], website});
+    }catch(e){
+        errorLog(e);
+        res.redirect("/admin");
+    }
+});
+
+router.post("/updateImages/:id", upload.fields(imageArrayFields), async(req,res) =>{
+    try{
+        let website = await Website.findById(req.params.id);;
+        removeFileNames(website.imageFileNames);
+        website.imageFileNames = getFileNames(req.files);
+        await website.save();
+        await saveCSS(website);
+    }catch(e){
+        errorLog(e);
+    }
+    res.redirect("/admin");
+});
+
+getFileNames = files =>{
+    let list = [];
+    for(let i = 0; i < imageNameFields.length; i++){
+        list.push(files[imageNameFields[i]][0]["filename"]);
+    }
+    return list;
+}
+
+removeFileNames = array =>{
+    for(let fileName of array){
+        if(fileName == "" || !fileName)continue;
+        fs.unlink(path.join(uploadPath, fileName), err => {
+            if (err) errorLog(err);
+        })
+    }
+}
+
 let groupActiveOn = ["Multi Site", "Group Site", "Landing Page"];
 createWebsite = body =>{
-    let imageDetails = getImageDetails([body.desktopImage,body.tabletImage, body.mobileImage, body.backgroundImage]);
-     imageDetails = [[],[]];
     let website = new Website({
         name: body.name,
         url: body.url,
@@ -102,8 +152,11 @@ createWebsite = body =>{
         liveDate: new Date(body.liveDate),
         pageList: JSON.parse(body.pageList),
         featureList: JSON.parse(body.featureList),
-        images: imageDetails[0],
-        imageTypes: imageDetails[1]
+        primaryFont: body.primaryFont,
+        secondaryFont: body.secondaryFont,
+        primaryColour: body.primaryColour,
+        secondaryColour: body.secondaryColour,
+        state: 1
     });
     if(groupActiveOn.includes(body.type)){
         website.group = body.group;
@@ -121,13 +174,14 @@ updateSite = (site, body) =>{
     site.liveDate = new Date(body.liveDate);
     site.pageList = JSON.parse(body.pageList);
     site.featureList = JSON.parse(body.featureList);
+    site.primaryFont = body.primaryFont;
+    site.secondaryFont = body.secondaryFont;
+    site.primaryColour = body.primaryColour;
+    site.secondaryColour = body.secondaryColour;
     if(groupActiveOn.includes(body.type)){
         site.group = body.group;
     }
     addFiles(site.pageList, site.featureList, (groupActiveOn.includes(body.type)?site.group:null));
-    let imageDetails = getImageDetails([body.desktopImage,body.tabletImage, body.mobileImage, body.backgroundImage]);
-    site.images = imageDetails[0];
-    site.imageTypes = imageDetails[1];
 
     return site;
 }
@@ -163,54 +217,63 @@ addFiles = async(pageList, featureList, group) =>{
             if(!prefFeatures.includes(feature))prefFeatures.push(feature);
         }
         let prefGroups = prefs.groupList;
-        if(group != null && group.length > 0)if(!prefGroups.includes(group[0]))prefGroups.push(group[0]);
+        if(group != null && group != "")if(!prefGroups.includes(group))prefGroups.push(group);
         prefs.pageList = prefPages;
         prefs.featureList = prefFeatures;
         prefs.groupList = prefGroups;
         await prefs.save();
     }catch(e){
-        console.log(e);
+        errorLog(e);
     }
 }
 
-getImageDetails = files =>{
-    let imageList = [];
-    let imageTypeList = [];
-    for(let i = 0; i < files.length; i++){
-        if(files[i] == null)continue;
-        const image = JSON.parse(files[i]);
-        let type = image.type.split(";")[0];
-        if(image != null && type == "image/jpeg"){
-            imageList.push(new Buffer.from(image.data, "base64"));
-            imageTypeList.push(type);
+addExtras = (font1, font2) =>{
+    let string = "";
+    if(font1 == "Italianno"){
+        string+=`
+        #mainContainer h1::before{
+            content: '';
+            width: 65%;
+            position: absolute;
+            height: 60px;
+            display: block;
+            border-bottom: 2px solid var(--mainColour);
+            border-radius: 50%;
+            left: 35%;
+            bottom:0.5vh;
+            opacity:0.5;
         }
+        
+        #mainContainer h1::after{
+            content: '';
+            width: 65%;
+            position: absolute;
+            height: 60px;
+            display: block;
+            border-top: 2px solid var(--mainColour);
+            border-radius: 50%;
+            left: 0%;
+            bottom:-3vh;
+            opacity:0.5;
+        }`;
     }
-    
-    return [imageList, imageTypeList];
+
+    return string;
 }
 
-
-createCSS = (cssModel) =>{
-    return "";
-    let cssArray = cssModel.element;
+createCSS = (website) =>{ 
     let css ="";
-    for(let ele of cssArray){
-        let parts = ele.split("^");
-        let values = parts[1].split(";");
-        css+=`${parts[0]}{`;
-        for(let value of values){
-            css+=value+";";
-        }
-        css+=`}`;
-    }
+    css+=`:root{--mainColour:${website.primaryColour};--secondaryColour:${website.secondaryColour};`;
+    css+=`--primaryFont:'${website.primaryFont}', sans-serif;`;
+    css+=`--secondaryFont:'${website.secondaryFont}', sans-serif;}`;
+    css+=`body::before{background-image:url(/images/sites/${website.imageFileNames[3]});}`;
+    css+=addExtras(website.primaryFont, website.secondaryFont);
     return css;
 }
 
-// let fs = require("fs").promises;
-saveCSS = async(website,css)=> {
-    return;
+saveCSS = async(website) =>{
     try{
-        await fs.promises.writeFile(`../Portfolio/public/css/sites/${website.fileName}.css`, createCSS(css)); //TODO almost definitely fucked
+        await fs.promises.writeFile(`../Portfolio/public/css/sites/${website.fileName}.css`, createCSS(website));
     }catch(e){
         errorLog(e);
     }

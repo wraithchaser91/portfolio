@@ -1,12 +1,20 @@
 <div id="mainContainer" class="flex-column">
-    <h1>Update Website Model</h1>
+    <h1>Update Website</h1> 
     <form action="<%= `/admin/update/${website.id}` %>" method="POST" id="newSiteForm">
-        <%- include("../partials/formPartials/form_fields") %>
+        <div class="flex-row">
+            <a href="/admin" class="reverseAnchor backButton">Back</a>
+            <button type="submit" id="saveButton">Save</button>
+        </div>
+        <div class="flex-row">
+            <%- include("../partials/formPartials/detail_fields.ejs") %>
+            <%- include("../partials/formPartials/css_fields.ejs") %>
+        </div>
     </form>
 </div>
 <script>
     document.getElementById("fileName").readOnly = true;
     document.getElementById("fileName").style.cursor = "not-allowed";
+    document.getElementById("newSiteForm").style.width = "60vw";
 </script>
 <script src="/js/list.js"></script>
 <script src="/js/listInput.js"></script>

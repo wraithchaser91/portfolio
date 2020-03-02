@@ -34,13 +34,13 @@
         <div id="screenShots">
             <% let defPath = "/images/temp.png"; %>
             <div class="imageContainer">
-                <img src="<%= (typeof website != "undefined"?`${website.imagePath[0]}`:`${defPath}`)%>">
+                <img src="<%= (typeof website != "undefined"?`/images/sites/${website.imageFileNames[0]}`:`${defPath}`)%>">
             </div>
             <div class="imageContainer">
-                <img src="<%= (typeof website != "undefined"?`${website.imagePath[1]}`:`${defPath}`)%>">
+                <img src="<%= (typeof website != "undefined"?`/images/sites/${website.imageFileNames[1]}`:`${defPath}`)%>">
             </div>
             <div class="imageContainer">
-                <img src="<%= (typeof website != "undefined"?`${website.imagePath[2]}`:`${defPath}`)%>">
+                <img src="<%= (typeof website != "undefined"?`/images/sites/${website.imageFileNames[2]}`:`${defPath}`)%>">
             </div>
         </div>
         <div id="controls" class="flex-row">
@@ -50,7 +50,9 @@
         </div>
     </div>
     <div id="disclaimer">Pages and Features are not limited to this design</div>
+    <div id="disclaimer2">Image quality is not indicitive of final site design</div>
 </div>
+<a href="https://travelbookhotels.com/" target="_blank"><img id="logo" src="/images/logo.png"></a>
 
 <script>
 

@@ -1,6 +1,6 @@
-#newSiteForm{
+#newSiteForm, #updateImageForm{
     height:70%;
-    top:10%;
+    top:15%;
 }
 
 #newSiteForm .flex-row .flex-column{
@@ -169,10 +169,41 @@ h3{
     padding: 5px 10px;
     background-color: #23232344;
     border-radius: 8px;
-    min-height:45px;
+    min-height:40px;
 }
 
-#fileName{
+[type="file"]{
+    text-align-last: unset;
+}
+
+#fileName:read-only{
     background-color: #888;
     border: 1px solid #888;
+}
+
+#updateImageForm .absColumn .flex-row .flex-column{
+    background-color: var(--mainColour);
+    margin: 1vh 1vw;
+    border-radius: 8px;
+}
+
+#updateImageForm .absColumn .flex-row .flex-column [type="file"]{
+    margin:0;
+    padding:0;
+}
+
+.parentColourColumn{
+    transition:0.3s;
+    transform-origin: 100% 0%;
+}
+
+.hexColumn{
+    transition:0.3s;
+    margin-top: -6vh !important;
+    transform: rotateY(-90deg);
+    transform-origin: 20% 0%;
+}
+
+.hexInput{
+    width: 50%;
 }

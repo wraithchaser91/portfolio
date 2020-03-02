@@ -86,18 +86,20 @@ startSave = () =>{
         form.appendChild(input);
     }
 
-    let cssArray = [
+    let cssNames = ["primaryFont", "secondaryFont", "primaryColour", "secondaryColour"];
+    let cssValues = [
         fontSelects[0].options[fontSelects[0].selectedIndex].value,
         fontSelects[1].options[fontSelects[1].selectedIndex].value,
         window.getComputedStyle(colourDrops[0]).backgroundColor,
         window.getComputedStyle(colourDrops[1]).backgroundColor
     ];
-    let input = document.createElement("input");
-    let value = JSON.stringify(cssArray);
-    input.value = value;
-    input.name = "cssArray";
-    input.style.display = "none";
-    form.appendChild(input);
+    for(let i = 0; i < cssNames.length; i++){
+        let input = document.createElement("input");
+        input.value = cssValues[i];
+        input.name = cssNames[i];
+        input.style.display = "none";
+        form.appendChild(input);
+    }
     
     form.submit();
 }
@@ -137,6 +139,24 @@ for(let i = 0; i < reqNames.length; i++){
     reqs.push(req);
 }
 
+getColours = string =>{
+    return string.split("rgb(")[1].split(")")[0].replace(/ /g, "").split(",");
+}
+
+let req = new XMLHttpRequest();
+req.onreadystatechange = function(){
+    if(this.readyState == 4 && this.status == 200){
+        let array = JSON.parse(req.responseText);
+        changeFont(array[0], textToModify[0]);
+        changeFont(array[1], textToModify[1]);
+        let colour1 = getColours(array[2]);
+        colourPickers[0].changeColour(colour1[0],colour1[1],colour1[2])
+        let colour2 = getColours(array[3]);
+        colourPickers[1].changeColour(colour2[0],colour2[1],colour2[2])
+    }
+};
+req.open("GET", `/ajax/data/website/cssValues/${document.getElementById("hotelName").value}`);
+reqs.push(req);
 
 //CSS Function
 let fonts = ["Raleway","Italianno","Lobster"]; //get from server

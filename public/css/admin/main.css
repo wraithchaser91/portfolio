@@ -126,6 +126,8 @@ button, a{
     margin: 0 0.5vw;
     text-align: center;
     font-size: 0.8em;
+    border: none;
+    cursor: pointer;
 }
 
 .reverseAnchor{
@@ -174,7 +176,7 @@ a:hover{
     background-color: #2223;
     margin:1vh 1vw;
     border-radius: 8px;
-    padding:1% 2%;
+    padding: 1.5% 2% 3%;
 }
 
 .websiteTemplate .flex-row{
@@ -219,13 +221,6 @@ a:hover{
     margin-top: -4vh;
 }
 
-.filepond{
-    width:100%;
-    height:150px;
-    overflow-y: auto;
-    overflow-x: hidden;
-}
-
 .parentColourRow .flex-column,
 .parentColourRow .flex-row{
     flex: unset !important;
@@ -233,8 +228,8 @@ a:hover{
 
 .colourRow{
     border:1px solid black;
-    width:88px;
-    height:88px;
+    width:55px;
+    height:55px;
     cursor: crosshair;
 }
 .colourRow span{
@@ -248,9 +243,9 @@ a:hover{
     margin-bottom:1vh;
 }
 .colourDrop{
-    width:50px;
-    height:50px;
+    width:30px;
+    height:30px;
     background-color:white;
-    margin:0 0.5vw;
+    margin:0 0.5vw 2vh;
     border-radius: 10px;
 }

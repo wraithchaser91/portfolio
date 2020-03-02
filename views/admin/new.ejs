@@ -4,7 +4,15 @@
         <h4 class="error"><%= message %></h4>
     <% } %>  
     <form action="/admin/new" method="POST" enctype="multipart/form-data" id="newSiteForm">
-        <%- include("../partials/formPartials/form_fields") %>
+        <div class="flex-row">
+            <a href="/admin" class="reverseAnchor backButton">Back</a>
+            <button type="submit" id="saveButton">Save</button>
+        </div>
+        <div class="flex-row">
+            <%- include("../partials/formPartials/image_fields.ejs") %>
+            <%- include("../partials/formPartials/detail_fields.ejs") %>
+            <%- include("../partials/formPartials/css_fields.ejs") %>
+        </div>
     </form>
 </div>
 <script src="/js/list.js"></script>

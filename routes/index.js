@@ -3,20 +3,17 @@ const router = express.Router();
 const Website = require("../models/Website");
 
 router.get("/", async(req, res)=>{
-    let id = "5e3c389a2648c030089391d6";
     let fonts = ["Raleway","Italianno","Lobster"]; //dynamically needed from database 
     let website;
     let siteCSS = "";
     try{
-        console.log("trying to find website");
         const websites = await Website.find({});
-        console.log("website found")
-        website = websites[0];
+        website = websites[websites.length-1];
         siteCSS = `sites/${website.fileName}`;
     }catch(e){
         errorLog(e);
     }
-    res.render("index", {css:["admin/main", siteCSS], website, fonts});
+    res.render("index_2", {css:["main2", siteCSS], website, fonts});
 });
 
 errorLog = error => console.log("ERROR in INDEX: " + error); 

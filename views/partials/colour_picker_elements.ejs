@@ -1,10 +1,10 @@
 <div class="flex-row parentColourRow">
-    <div class="flex-column">
+    <div class="flex-column parentColourColumn">
         <label>Use the mouse wheel to rotate</label>
         <div class="flex-column colourRow">
-            <% for(let i = 0; i < 256/3; i++){%>
+            <% for(let i = 0; i < 256/5; i++){%>
                 <div class="flex-row">
-                <% for(let j = 0; j < 256/3; j++){ %>
+                <% for(let j = 0; j < 256/5; j++){ %>
                         <span></span>
                 <%}%>
                 </div>
@@ -12,7 +12,12 @@
         </div>
         <span class="colourCheck"></span>
     </div>
+    <div class="flex-column hexColumn">
+        <label>Enter Hex Value</label>
+        <input type="text" class="hexInput">
+    </div>
     <div class="flex-column">
         <span class="colourDrop"></span>
+        <button type="button" class="colourChoice reverseAnchor">Change to Hex</button>
     </div>
 </div>

@@ -15,10 +15,6 @@
     color:white;
 }
 
-h1,h2,h3,h4,h5,p{
-    cursor: default;
-}
-
 body{
     width: 100vw;
     height:100vh;
@@ -79,6 +75,8 @@ body::before{
     background-color: #000a;
     border-radius: var(--border-radius);
     position: relative;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 #descColumn, #contentColumn{
@@ -117,7 +115,7 @@ body::before{
 }
 
 #descColumn a:hover{
-    color:var(--mainColour);
+    color:var(--secondaryColour);
 }
 
 #descColumn h3{
@@ -213,10 +211,23 @@ body::before{
     transform: scale(1.05);
 }
 
-#disclaimer{
+#disclaimer,
+#disclaimer2{
     position: absolute;
-    bottom:2%;
+    bottom:3%;
     left:43%;
-    color:#fffa;
+    color:#fff8;
     font-size: 0.6em;
+}
+
+#disclaimer2{
+    bottom:1%;
+    left:43.1%;
+}
+
+#logo{
+    position: fixed;
+    width: 4vw;
+    bottom:1vh;
+    left:48vw;
 }
