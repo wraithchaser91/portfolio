@@ -1,7 +1,7 @@
 <% let inGroup = ["Multi Site", "Group Site", "Landing Page"] %>
 
-<a href="<%= `/site/${pagination[0].id}` %>" id="prevTemplate"><div class="flex-row pagination"><img src="/images/chevron.png"><h3><%= pagination[0].name %></h3></div></a>
-<a href="<%= `/site/${pagination[1].id}` %>" id="nextTemplate"><div class="flex-row pagination"><h3><%= pagination[1].name %></h3><img src="/images/chevron.png"></div></a>
+<a href="<%= `/site/${pagination[0].name.toLowerCase().replace(/ /g,"")}` %>" id="prevTemplate"><div class="flex-row pagination"><img src="/images/chevron.png"><h3><%= pagination[0].name %></h3></div></a>
+<a href="<%= `/site/${pagination[1].name.toLowerCase().replace(/ /g,"")}` %>" id="nextTemplate"><div class="flex-row pagination"><h3><%= pagination[1].name %></h3><img src="/images/chevron.png"></div></a>
 <div id="overlay"></div>
 <div id="mainContainer" class="flex-column">
     <div class="flex-column">

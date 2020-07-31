@@ -4,14 +4,14 @@ const Website = require("../models/Website");
 const Feature = require("../models/Feature");
 const {errorLog, render} = require("../utils");
 let css = ["site"];
-router.get("/:id", async(req, res)=>{
+router.get("/:name", async(req, res)=>{
     let pagination = [];
     let website;
     let features;
     try{
         const websites = await Website.find({state:0});
         for(let i = 0; i < websites.length; i++){
-            if(websites[i].id == req.params.id){
+            if(websites[i].name.replace(/ /g ,"").toLowerCase() == req.params.name){
                 website = websites[i];
                 let prev = i-1;
                 if(prev < 0)prev = websites.length-1;

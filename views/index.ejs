@@ -14,7 +14,7 @@
                 <div class="cardBody">
                     <h3 class="cardTitle"><%= item.name %></h3>
                     <p class="cardText"><%= item.description %></p>
-                    <a href="<%= `/site/${item.id}` %>" class="cardLink">View This Template</a>
+                    <a href="<%= `/site/${item.name.replace(/ /g, "").toLowerCase()}` %>" class="cardLink">View This Template</a>
                 </div>
             </div>
         <%})%>
