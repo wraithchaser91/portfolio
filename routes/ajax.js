@@ -68,7 +68,7 @@ router.get("/data/website/:type/:name", async(req, res)=>{
 });
 
 getCSSValues = site =>{
-    return [site.primaryFont, site.secondaryFont, site.primaryColour, site.secondaryColour];
+    return [site.primaryColour, site.secondaryColour];
 }
 
 errorLog = error => console.log("ERROR in AJAX: "+error);

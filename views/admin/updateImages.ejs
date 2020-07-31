@@ -1,8 +1,9 @@
+<%- include("../partials/adminHeader") %>
 <div id="mainContainer" class="flex-column">
     <h1>Update Website Images</h1> 
     <form action="<%= `/admin/updateImages/${website.id}` %>" method="POST" enctype="multipart/form-data" id="newSiteForm">
         <div class="flex-row">
-            <a href="/admin" class="reverseAnchor backButton">Back</a>
+            <a href="/admin/websitemodels" class="reverseAnchor backButton">Back</a>
             <button type="submit" id="saveButton">Save</button>
         </div>
         <div class="flex-row">

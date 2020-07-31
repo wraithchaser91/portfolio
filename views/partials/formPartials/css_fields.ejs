@@ -1,39 +1,5 @@
 <div class="flex-column absColumn">
     <div class="flex-row">
-        <div class="flex-column">
-            <select class="fontSelect">
-                <% fonts.forEach(item =>{ %>
-                    <% if(typeof website != "undefined"){ %>
-                        <% if(website.primaryFont == item){ %>
-                            <option selected><%= item %></option>
-                        <% }else{ %>
-                            <option><%= item %></option>
-                        <%}%>
-                    <% }else{ %>
-                        <option><%= item %></option>
-                    <%}%>
-                <%})%>
-            </select>
-            <h3 id="primaryHeader">Hotel name</h3>
-        </div>
-        <div class="flex-column">
-            <select class="fontSelect">
-                <% fonts.forEach(item =>{ %>
-                    <% if(typeof website != "undefined"){ %>
-                        <% if(website.secondaryFont == item){ %>
-                            <option selected><%= item %></option>
-                        <% }else{ %>
-                            <option><%= item %></option>
-                        <%}%>
-                    <% }else{ %>
-                        <option><%= item %></option>
-                    <%}%>
-                <%})%>
-            </select>
-            <h3 id="secondaryHeader">Visit the site</h3>
-        </div>
-    </div>
-    <div class="flex-row">
         <div class="flex-column"><h3>Primary Colour</h3><%- include ("../colour_picker_elements")%></div>
         <div class="flex-column"><h3>Secondary Colour</h3><%- include ("../colour_picker_elements")%></div>
     </div>

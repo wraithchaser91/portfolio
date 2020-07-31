@@ -47,19 +47,15 @@ const websiteSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    primaryFont:{
-        type: String,
-        required: true
-    },
-    secondaryFont:{
-        type: String,
-        required: true
-    },
     primaryColour:{
         type: String,
         required: true
     },
     secondaryColour:{
+        type: String,
+        required: true
+    },
+    description:{
         type: String,
         required: true
     },

@@ -1,73 +1,22 @@
-<% let inGroup = ["Multi Site", "Group Site", "Landing Page"] %>
-
-<div id="mainContainer" class="flex-row">
-    <div id="descColumn" class="flex-column">
-        <h1><%= website.name %></h1>
-        <% if(typeof website != "undefined" && inGroup.includes(website.type)){ %>
-            <h3 id="groupString">Part of the <%= website.group %> group</h3>
-        <% } %>
-        <a href="<%= website.url %> " target="_blank">Visit the site</a>
-        <h3>Full Page List</h3>
-        <div id="pageList">
-            <% website.pageList.forEach(item =>{ %>
-                <h4><%= item %></h4> 
-            <%})%>
-
-        </div>
-        <h3>Feature List</h3>
-        <div id="featureList">
-            <% website.featureList.forEach(item =>{ %>
-                <h4><%= item %></h4> 
-            <%})%>
-        </div>
-        <% if(website.howItWasMade == "Wordpress"){ %>
-            <h4>Built using Wordpress & Elementor</h4>
-        <% }else if(website.howItWasMade == "Custom Built"){ %> 
-            <h4>Custom Built</h4>
-        <% }else{ %>
-            <h4>Unkown Origins</h4>
-        <% } %>  
-        <% let datePieces = website.liveDate.toISOString().split("T")[0].split("-"); let day = parseInt(datePieces[2])+1; if(day < 10)day = "0"+day; %>
-        <h4>Live since <%= `${day}/${datePieces[1]}/${datePieces[0]}` %></h4>
+<header>
+    <a href="https://travelbookhotels.com/" rel="noreferrer" target="_blank" aria-label="Travelbook Hotels Logo"><img id="logo" src="/images/logo.png" alt="Travelbook Hotels Logo"></a>
+    <h1>Travelbook Group Templates</h1>
+    <p>We here at The Travelbook Group take great pride in the websites that we create.</p>
+    <p>We listen to what it is you want and then use our expertise and past experiences to create something that is unique to you.</p>
+    <p>Whether it be a completely new design or ideas taken from another source it does not matter, we know how to make it into something that you will be proud to call your own.</p>
+    <h2>Our templates - Your masterpiece</h2>
+</header>
+<section class="flex-column">
+    <div class="flex-row">
+        <%websites.forEach(item=>{%>
+            <div class="card" style="--bannerColour:<%= item.primaryColour %>">
+                <img src="/images/sites/<%= item.imageFileNames[3] %>" alt="Background image for <%= item.name %>" class="cardImg">
+                <div class="cardBody">
+                    <h3 class="cardTitle"><%= item.name %></h3>
+                    <p class="cardText"><%= item.description %></p>
+                    <a href="<%= `/site/${item.id}` %>" class="cardLink">View This Template</a>
+                </div>
+            </div>
+        <%})%>
     </div>
-    <div id="contentColumn" class="flex-column">
-        <div id="screenShots">
-            <% let defPath = "/images/temp.png"; %>
-            <div class="imageContainer">
-                <img src="<%= (typeof website != "undefined"?`/images/sites/${website.imageFileNames[0]}`:`${defPath}`)%>">
-            </div>
-            <div class="imageContainer">
-                <img src="<%= (typeof website != "undefined"?`/images/sites/${website.imageFileNames[1]}`:`${defPath}`)%>">
-            </div>
-            <div class="imageContainer">
-                <img src="<%= (typeof website != "undefined"?`/images/sites/${website.imageFileNames[2]}`:`${defPath}`)%>">
-            </div>
-        </div>
-        <div id="controls" class="flex-row">
-            <div class="deviceButton"><img src="/images/desktopTemplate.png"></div>
-            <div class="deviceButton"><img src="/images/tabletTemplate.png"></div>
-            <div class="deviceButton"><img src="/images/phoneTemplate.png"></div>
-        </div>
-    </div>
-    <div id="disclaimer">Pages and Features are not limited to this design</div>
-    <div id="disclaimer2">Image quality is not indicitive of final site design</div>
-</div>
-<a href="https://travelbookhotels.com/" target="_blank"><img id="logo" src="/images/logo.png"></a>
-
-<script>
-
-    let currentDevice = 0;
-    let screenshots = document.getElementsByClassName("imageContainer");
-    let deviceButtons = document.getElementsByClassName("deviceButton");
-    for(let i = 0; i < deviceButtons.length; i++){
-        deviceButtons[i].addEventListener("click", ()=>changeDevice(i));
-    }
-
-    changeDevice = index =>{
-        if(currentDevice == index)return;
-        screenshots[currentDevice].style.transform = "scale(0)";
-        screenshots[index].style.transform = "scale(1)";
-        currentDevice = index;
-        
-    }
-</script>
+</section>

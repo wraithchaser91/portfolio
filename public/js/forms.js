@@ -50,15 +50,15 @@ typeSelect.addEventListener("change", ()=>{
 
 let hotelNameEle = document.getElementById("hotelName");
 let fileNameEle = document.getElementById("fileName");
-let primaryHeader = document.getElementById("primaryHeader");
-if(hotelNameEle.value != "")primaryHeader.textContent = hotelNameEle.value;
-hotelNameEle.addEventListener("blur", ()=>{
-    if(!fileNameEle.readOnly)fileNameEle.value = sanitize(hotelNameEle.value.toLowerCase());
-    primaryHeader.textContent = hotelNameEle.value;
-});
-sanitize = string =>{
-    return string.replace(/[^a-z]/g, "");
-}
+// let primaryHeader = document.getElementById("primaryHeader");
+// if(hotelNameEle.value != "")primaryHeader.textContent = hotelNameEle.value;
+// hotelNameEle.addEventListener("blur", ()=>{
+//     if(!fileNameEle.readOnly)fileNameEle.value = sanitize(hotelNameEle.value.toLowerCase());
+//     primaryHeader.textContent = hotelNameEle.value;
+// });
+// sanitize = string =>{
+//     return string.replace(/[^a-z]/g, "");
+// }
 
 let form = document.getElementById("newSiteForm");
 form.addEventListener("submit", (e)=>{
@@ -86,10 +86,8 @@ startSave = () =>{
         form.appendChild(input);
     }
 
-    let cssNames = ["primaryFont", "secondaryFont", "primaryColour", "secondaryColour"];
+    let cssNames = ["primaryColour", "secondaryColour"];
     let cssValues = [
-        fontSelects[0].options[fontSelects[0].selectedIndex].value,
-        fontSelects[1].options[fontSelects[1].selectedIndex].value,
         window.getComputedStyle(colourDrops[0]).backgroundColor,
         window.getComputedStyle(colourDrops[1]).backgroundColor
     ];
@@ -143,43 +141,18 @@ getColours = string =>{
     return string.split("rgb(")[1].split(")")[0].replace(/ /g, "").split(",");
 }
 
+let hotelName = document.getElementById("hotelName").value;
+if(hotelName != ""){
 let req = new XMLHttpRequest();
 req.onreadystatechange = function(){
     if(this.readyState == 4 && this.status == 200){
         let array = JSON.parse(req.responseText);
-        changeFont(array[0], textToModify[0]);
-        changeFont(array[1], textToModify[1]);
-        let colour1 = getColours(array[2]);
+        let colour1 = getColours(array[0]);
         colourPickers[0].changeColour(colour1[0],colour1[1],colour1[2])
-        let colour2 = getColours(array[3]);
+        let colour2 = getColours(array[1]);
         colourPickers[1].changeColour(colour2[0],colour2[1],colour2[2])
     }
 };
 req.open("GET", `/ajax/data/website/cssValues/${document.getElementById("hotelName").value}`);
 reqs.push(req);
-
-//CSS Function
-let fonts = ["Raleway","Italianno","Lobster"]; //get from server
-let fontSelects = document.getElementsByClassName("fontSelect");
-let textToModify = [document.getElementById("primaryHeader"), document.getElementById("secondaryHeader")];
-for(let i = 0; i < fontSelects.length; i++){
-    fontSelects[i].addEventListener("change", ()=>{
-        changeFont(fontSelects[i].options[fontSelects[i].selectedIndex].value, textToModify[i]);
-    });
-    fontSelects[i].addEventListener("wheel", (e)=>{
-        let index = fontSelects[i].selectedIndex;
-        if(e.deltaY < 0 && index != 0){
-            index--;
-            fontSelects[i].selectedIndex = index;
-            changeFont(fontSelects[i].options[fontSelects[i].selectedIndex].value, textToModify[i]);
-        }else if(e.deltaY > 0 && index != fonts.length-1){
-            index++;
-            fontSelects[i].selectedIndex = index;
-            changeFont(fontSelects[i].options[fontSelects[i].selectedIndex].value, textToModify[i]);
-        }
-    });
-}
-
-changeFont = (font, target) =>{
-    target.style.fontFamily = font;
 }

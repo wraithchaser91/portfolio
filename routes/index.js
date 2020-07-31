@@ -1,21 +1,22 @@
 const express = require("express");
 const router = express.Router();
 const Website = require("../models/Website");
+const {errorLog, render} = require("../utils");
+let css = ["home"];
 
 router.get("/", async(req, res)=>{
-    let fonts = ["Raleway","Italianno","Lobster"]; //dynamically needed from database 
-    let website;
-    let siteCSS = "";
+    let websites;
     try{
-        const websites = await Website.find({});
-        website = websites[websites.length-1];
-        siteCSS = `sites/${website.fileName}`;
+        websites = await Website.find({state:0});
+        // for(let website of websites){
+        //     website.description = "Description Not Found";
+        //     await website.save();
+        // }
     }catch(e){
-        errorLog(e);
+        if(errorLog(e,req,res,"Could not load the sites", "/error/404"))return;
     }
-    res.render("index_2", {css:["main2", siteCSS], website, fonts});
+    render(req,res,"index",{css,websites});
+    
 });
-
-errorLog = error => console.log("ERROR in INDEX: " + error); 
 
 module.exports = router;

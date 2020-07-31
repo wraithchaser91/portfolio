@@ -1,0 +1,21 @@
+.featureForm{
+    position: relative;
+    flex-direction: row;
+}
+
+.featureForm label{
+    font-size: 1em;
+}
+
+.featureForm textarea{
+    padding:2% 3%;
+}
+
+.featureForm .flex-row{
+    justify-content: space-between;
+    margin-bottom:1vh;
+}
+
+.centeredColumn{
+    width:40%;
+}

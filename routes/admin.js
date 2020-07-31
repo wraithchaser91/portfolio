@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const Website = require("../models/Website");
 const Preferences = require("../models/Preferences");
+const Feature = require("../models/Feature");
+const {errorLog, render} = require("../utils");
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
@@ -13,29 +15,31 @@ const upload = multer({
     callback(null, imageMimeTypes.includes(file.mimetype))
   }
 })
-let fonts = ["Raleway","Italianno","Lobster"];
-let imageNameFields = ["desktopImage", "tabletImage", "mobileImage", "backgroundImage"];
+let imageNameFields = ["desktopImage", "tabletImage", "mobileImage", "backgroundImage", "logo"];
 let imageArrayFields = [];
 for(let imageName of imageNameFields){
     imageArrayFields.push({name: imageName});
 }
+const {checkAuthentication} = require("../middleware");
 
-router.get("/login", async(req,res)=>{
-    //will be used to verify user credentials
+router.use(checkAuthentication);
+
+router.get("/", (req,res)=>{
+    render(req,res,"admin",{css:["/admin/main"]});
 });
 
-router.get("/", async(req, res)=>{
+router.get("/websitemodels", async(req, res)=>{
     let websites = [];
     try{
         websites = await Website.find({});
-    }catch(error){
-        errorLog(error);
+    }catch(e){
+        if(errorLog(e,req,res,"Error getting all website models","/admin"))return;
     }
-    res.render("admin", {css:["/admin/main"], websites});
+    render(req,res,"admin/websitemodels",{css:["/admin/main"], websites});
 });
 
 router.get("/new", (req, res)=>{
-    res.render("admin/new", {css:["/admin/main","/admin/new"], fonts});
+    render(req,res,"admin/new",{css:["/admin/main","/admin/new"], fonts});
 });
 
 router.post("/new", upload.fields(imageArrayFields), async(req, res)=>{
@@ -52,27 +56,27 @@ router.post("/new", upload.fields(imageArrayFields), async(req, res)=>{
         website.imageFileNames = fileNames;
         if(test){
             removeFileNames(fileNames);
-            res.render("admin/new", {css:["/admin/main", "/admin/new"], website, message:`A model with the same ${(isName?'hotel':'file')} name already exists`, fonts});
+            render(req,res,"admin/new",{css:["/admin/main", "/admin/new"], website, message:`A model with the same ${(isName?'hotel':'file')} name already exists`, fonts});
             return;
         }else{
             await website.save();
             await saveCSS(website);
         }
-    }catch(error){
+    }catch(e){
         removeFileNames(fileNames);
-        errorLog(error);
+        if(errorLog(e,req,res,"Error creating new model"))return;
     }
-    res.redirect(`/admin`);
+    res.redirect(`/admin/websitemodels`);
 });
 
 router.get("/update/:id", async(req,res) =>{
+    let website;
     try{
-        const website = await Website.findById(req.params.id);;
-        res.render("admin/update", {css:["admin/main", "admin/new"], website, fonts});
+        website = await Website.findById(req.params.id);;
     }catch(e){
-        errorLog(e);
-        res.redirect("/admin");
+        if(errorLog(e,req,res,"Error finding models to update","/admin/websitemodels"))return;
     }
+    render(req,res,"admin/update",{css:["admin/main", "admin/new"], website, fonts});
 });
 
 router.post("/update/:id", async(req,res) =>{
@@ -82,33 +86,33 @@ router.post("/update/:id", async(req,res) =>{
         await website.save();
         await saveCSS(website);
     }catch(e){
-        errorLog(e);
+        if(errorLog(e,req,res,"Error updating model"))return;
     }
-    res.redirect("/admin");
+    res.redirect("/admin/websitemodels");
 });
 
 router.get("/update/state/:id", async(req, res) =>{
     if(!req.query.state || req.query.state == ""){
-        res.redirect("/admin");
+        res.redirect("/admin/websitemodels");
     }
     try{
         let website = await Website.findById(req.params.id);
         website.state = req.query.state;
         await website.save();
     }catch(e){
-        errorLog(e);
+        if(errorLog(e,req,res,"Error updating state"))return;
     }
-    res.redirect("/admin");
+    res.redirect("/admin/websitemodels");
 });
 
 router.get("/updateImages/:id", async(req,res) =>{
+    let website;
     try{
-        const website = await Website.findById(req.params.id);;
-        res.render("admin/updateImages", {css:["admin/main", "admin/new"], website});
+        website = await Website.findById(req.params.id);;
     }catch(e){
-        errorLog(e);
-        res.redirect("/admin");
+        if(errorLog(e,req,res,"Error accessing model to update images","/admin/websitemodels"))return;
     }
+    render(req,res,"admin/updateImages",{css:["admin/main", "admin/new"], website});
 });
 
 router.post("/updateImages/:id", upload.fields(imageArrayFields), async(req,res) =>{
@@ -119,9 +123,102 @@ router.post("/updateImages/:id", upload.fields(imageArrayFields), async(req,res)
         await website.save();
         await saveCSS(website);
     }catch(e){
-        errorLog(e);
+        if(errorLog(e,req,res,"Error updating images"))return;
     }
-    res.redirect("/admin");
+    res.redirect("/admin/websitemodels");
+});
+
+router.get("/activate", async(req,res)=>{
+    try{
+        let websites = await Website.find({});
+        for(let website of websites){
+            website.state = 0;
+            await website.save();
+        }
+    }catch(e){
+        if(errorLog(e,req,res,"Error activating all website models"))return;
+    }
+    res.redirect("/admin/websitemodels");
+});
+
+router.get("/deactivate", async(req,res)=>{
+    try{
+        let websites = await Website.find({});
+        for(let website of websites){
+            website.state = 2;
+            await website.save();
+        }
+    }catch(e){
+        if(errorLog(e,req,res,"Error deactivating all website models"))return;
+    }
+    res.redirect("/admin/websitemodels");
+});
+
+router.get("/features", async(req,res)=>{
+    let features;
+    try{
+        features = await Feature.find({}).sort({name:1}).exec();
+    }catch(e){
+        if(errorLog(e,req,res,"Error retrieving features","/admin"))return;
+    }
+    render(req,res,"admin/features",{css:["/admin/main", "/admin/features"], features});
+});
+
+router.post("/features/update/:id", async(req,res)=>{
+    if(!req.params.id || typeof req.params.id == "undefined"){
+        errorLog("Error", req,res,"Error updating feature, no id passed to server");
+        return;
+    }
+    try{
+        let feature = await Feature.findById(req.params.id);
+        if(!feature || typeof feature == "undefined"){
+            errorLog("Error", req,res,"Error updating feature, no feature found");
+            return;
+        }
+        feature.description = req.body.description;
+        await feature.save();
+    }catch(e){
+        if(errorLog(e,req,res,"Error updating feature"))return;
+    }
+    res.redirect("/admin/features");
+});
+
+router.get("/features/enable/:id", async(req,res)=>{
+    if(!req.params.id || typeof req.params.id == "undefined"){
+        errorLog("Error", req,res,"Error enabling feature, no id passed to server");
+        return;
+    }
+    try{
+        let feature = await Feature.findById(req.params.id);
+        if(!feature || typeof feature == "undefined"){
+            errorLog("Error", req,res,"Error enabling feature, no feature found");
+            return;
+        }
+        feature.isShown = true;
+        await feature.save();
+    }catch(e){
+        if(errorLog(e,req,res,"Error enabling feature"))return;
+    }
+    res.redirect("/admin/features");
+});
+
+router.get("/features/disable/:id", async(req,res)=>{
+    if(!req.params.id || typeof req.params.id == "undefined"){
+        errorLog("Error", req,res,"Error disabling feature, no id passed to server");
+        return;
+    }
+    try{
+        let feature = await Feature.findById(req.params.id);
+        if(!feature || typeof feature == "undefined"){
+            errorLog("Error", req,res,"Error disabling feature, no feature found");
+            return;
+        }
+        feature.isShown = false;
+        await feature.save();
+    }catch(e){
+        if(errorLog(e,req,res,"Error disabling feature"))return;
+    }
+    res.redirect("/admin/features");
 });
 
 getFileNames = files =>{
@@ -136,7 +233,7 @@ removeFileNames = array =>{
     for(let fileName of array){
         if(fileName == "" || !fileName)continue;
         fs.unlink(path.join(uploadPath, fileName), err => {
-            if (err) errorLog(err);
+            if (err) console.log("Error removing files");
         })
     }
 }
@@ -152,10 +249,9 @@ createWebsite = body =>{
         liveDate: new Date(body.liveDate),
         pageList: JSON.parse(body.pageList),
         featureList: JSON.parse(body.featureList),
-        primaryFont: body.primaryFont,
-        secondaryFont: body.secondaryFont,
         primaryColour: body.primaryColour,
         secondaryColour: body.secondaryColour,
+        description: body.description,
         state: 1
     });
     if(groupActiveOn.includes(body.type)){
@@ -174,10 +270,9 @@ updateSite = (site, body) =>{
     site.liveDate = new Date(body.liveDate);
     site.pageList = JSON.parse(body.pageList);
     site.featureList = JSON.parse(body.featureList);
-    site.primaryFont = body.primaryFont;
-    site.secondaryFont = body.secondaryFont;
     site.primaryColour = body.primaryColour;
     site.secondaryColour = body.secondaryColour;
+    site.description = body.description;
     if(groupActiveOn.includes(body.type)){
         site.group = body.group;
     }
@@ -214,7 +309,11 @@ addFiles = async(pageList, featureList, group) =>{
         }
         let prefFeatures = prefs.featureList;
         for(let feature of featureList){
-            if(!prefFeatures.includes(feature))prefFeatures.push(feature);
+            if(!prefFeatures.includes(feature)){
+                prefFeatures.push(feature);
+                let newFeature = new Feature({name:feature});
+                await newFeature.save();
+            }
         }
         let prefGroups = prefs.groupList;
         if(group != null && group != "")if(!prefGroups.includes(group))prefGroups.push(group);
@@ -223,51 +322,14 @@ addFiles = async(pageList, featureList, group) =>{
         prefs.groupList = prefGroups;
         await prefs.save();
     }catch(e){
-        errorLog(e);
+        if(errorLog(e,req,res,"Error adding files"))return;
     }
-}
-
-addExtras = (font1, font2) =>{
-    let string = "";
-    if(font1 == "Italianno"){
-        string+=`
-        #mainContainer h1::before{
-            content: '';
-            width: 65%;
-            position: absolute;
-            height: 60px;
-            display: block;
-            border-bottom: 2px solid var(--mainColour);
-            border-radius: 50%;
-            left: 35%;
-            bottom:0.5vh;
-            opacity:0.5;
-        }
-        
-        #mainContainer h1::after{
-            content: '';
-            width: 65%;
-            position: absolute;
-            height: 60px;
-            display: block;
-            border-top: 2px solid var(--mainColour);
-            border-radius: 50%;
-            left: 0%;
-            bottom:-3vh;
-            opacity:0.5;
-        }`;
-    }
-
-    return string;
 }
 
 createCSS = (website) =>{ 
     let css ="";
-    css+=`:root{--mainColour:${website.primaryColour};--secondaryColour:${website.secondaryColour};`;
-    css+=`--primaryFont:'${website.primaryFont}', sans-serif;`;
-    css+=`--secondaryFont:'${website.secondaryFont}', sans-serif;}`;
+    css+=`:root{--mainColour:${website.primaryColour};--secondaryColour:${website.secondaryColour};}`;
     css+=`body::before{background-image:url(/images/sites/${website.imageFileNames[3]});}`;
-    css+=addExtras(website.primaryFont, website.secondaryFont);
     return css;
 }
 
@@ -275,10 +337,8 @@ saveCSS = async(website) =>{
     try{
         await fs.promises.writeFile(`../Portfolio/public/css/sites/${website.fileName}.css`, createCSS(website));
     }catch(e){
-        errorLog(e);
+        if(errorLog(e,req,res,"Could not save CSS"))return;
     }
 }
-
-errorLog = error => console.log("ERROR in ADMIN:" + error);
 
 module.exports = router;

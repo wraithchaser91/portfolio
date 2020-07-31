@@ -1,11 +1,14 @@
+<%- include("../partials/adminHeader") %>
 <div id="mainContainer" class="flex-column">
     <h1>New Website Model</h1>
-    <% if(typeof message != "undefined"){ %>
-        <h4 class="error"><%= message %></h4>
+    <% if(typeof message.error != "undefined"){ %>
+        <% message.error.forEach(item=>{%>
+            <h4 class="error"><%= item %></h4>
+        <%})%>
     <% } %>  
     <form action="/admin/new" method="POST" enctype="multipart/form-data" id="newSiteForm">
         <div class="flex-row">
-            <a href="/admin" class="reverseAnchor backButton">Back</a>
+            <a href="/admin/websitemodels" class="reverseAnchor backButton">Back</a>
             <button type="submit" id="saveButton">Save</button>
         </div>
         <div class="flex-row">

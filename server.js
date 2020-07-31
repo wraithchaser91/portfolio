@@ -16,6 +16,21 @@ const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({limit: "10mb", extended: false}));
 app.use(bodyParser.json());
 
+//init passport
+const passport = require("passport");
+const initPassport = require("./passport-config");
+initPassport(passport);
+const flash = require("express-flash");
+const session = require("express-session");
+app.use(flash());
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+
 const mongoose = require("mongoose");
 mongoose.connect(process.env.DATABASE_URL, {useNewUrlParser:true, useUnifiedTopology:true});
 const db = mongoose.connection;
@@ -23,13 +38,17 @@ db.on("error", error=>console.log(error));
 db.on("open", ()=>console.log("Connected to mongoose"));
 
 const indexRouter = require("./routes/index");
+const authRouter = require("./routes/auth");
 const adminRouter = require("./routes/admin");
 const ajaxRouter = require("./routes/ajax");
-const testRouter = require("./routes/test");
+const siteRouter = require("./routes/site");
+const errorRouter = require("./routes/error");
 app.use("/", indexRouter);
+app.use("/auth", authRouter);
 app.use("/admin", adminRouter);
 app.use("/ajax", ajaxRouter);
-app.use("/test", testRouter);
+app.use("/site", siteRouter);
+app.use("/error", errorRouter);
 
 
 app.listen(process.env.PORT || 3000);

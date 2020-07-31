@@ -4,17 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="Description" content="The Travelbook Groups Template website. Showcasing website designs for potential clients to view and use">
     <title>Portfolio <%= (typeof website != "undefined"?`| ${website.name}`:"") %></title>
     
     <link rel="icon" href="/images/siteIcon.png" sizes="16x16" type="image/png">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/pikaday/css/pikaday.css">
-    <% if(typeof fonts != "undefined"){%>
-        <%fonts.forEach(item =>{%>
-            <link href="<%=`https://fonts.googleapis.com/css?family=${item}&display=swap`%>" rel="stylesheet">
-        <%})%>    
-    <%}else{%>
-        <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+    <% if(typeof pikaday != "undefined"){%>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/pikaday/css/pikaday.css">
     <%}%>
+
+    <link rel="stylesheet" href="/css/main.css">
     <% if(typeof css != "undefined") {%>
         <% if(typeof css === "string"){ %>
             <link rel="stylesheet" href="<%= `/css/${css}.css` %>">
@@ -23,8 +21,6 @@
                 <link rel="stylesheet" href="<%= `/css/${item}.css` %>">
             <%})%>
         <%}%>
-    <%}else{%>
-        <link rel="stylesheet" href="/css/main.css">
     <%}%>
 </head>
 <body>

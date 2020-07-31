@@ -1,0 +1,24 @@
+<%- include("../partials/adminHeader") %>
+<div id="mainContainer" class="flex-column">
+    <h1>Features</h1>
+    <div class="flex-column raisedDiv centeredColumn">
+        <% if(typeof features != "undefined"){ %>
+            <% features.forEach(item=>{ %>
+                <form action="<%= `/admin/features/update/${item._id}` %>" method="POST" class="featureForm">
+                    <div class="flex-row">
+                        <label name="name"><%= item.name%></label>
+                        <textarea name="description" id="" cols="60" rows="5"><%= (typeof item.description == "undefined"?"":item.description) %></textarea>
+                    </div>
+                    <div class="flex-column">
+                        <button type="submit">Update</button>
+                        <% if(item.isShown){ %>
+                            <a href="<%= `/admin/features/disable/${item._id}` %>" class="reverseAnchor">Disable</a>
+                        <% }else{ %>
+                            <a href="<%= `/admin/features/enable/${item._id}` %>" class="reverseAnchor">Enable</a>
+                        <%}%>
+                    </div>
+                </form>                    
+            <%})%>
+        <%}%>
+    </div>
+</div>
