@@ -9,7 +9,7 @@ router.get("/:name", async(req, res)=>{
     let website;
     let features;
     try{
-        const websites = await Website.find({state:0});
+        const websites = await Website.find({state:0}).sort({liveDate:-1}).exec();
         for(let i = 0; i < websites.length; i++){
             if(websites[i].name.replace(/ /g ,"").toLowerCase() == req.params.name){
                 website = websites[i];

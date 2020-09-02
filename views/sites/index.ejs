@@ -1,67 +1,70 @@
 <% let inGroup = ["Multi Site", "Group Site", "Landing Page"] %>
 
-<a href="<%= `/site/${pagination[0].name.toLowerCase().replace(/ /g,"")}` %>" id="prevTemplate"><div class="flex-row pagination"><img src="/images/chevron.png"><h3><%= pagination[0].name %></h3></div></a>
-<a href="<%= `/site/${pagination[1].name.toLowerCase().replace(/ /g,"")}` %>" id="nextTemplate"><div class="flex-row pagination"><h3><%= pagination[1].name %></h3><img src="/images/chevron.png"></div></a>
-<div id="overlay"></div>
+<a href="<%= `/site/${pagination[0].name.toLowerCase().replace(/ /g,"")}` %>" id="prevTemplate"><div class="flex-row pagination"><img src="/images/chevron.png" alt="Left Arrow"><h3><%= pagination[0].name %></h3></div></a>
+<a href="<%= `/site/${pagination[1].name.toLowerCase().replace(/ /g,"")}` %>" id="nextTemplate"><div class="flex-row pagination"><h3><%= pagination[1].name %></h3><img src="/images/chevron.png" alt="Right Arrow"></div></a>
+
+<header>
+    <a href="/">◀ Back to templates</a>
+</header>
+
 <div id="mainContainer" class="flex-column">
-    <div class="flex-column">
-        <h1><%= website.name %></h1>
-        <% if(typeof website != "undefined" && inGroup.includes(website.type)){ %>
-            <h3 id="groupString">Part of the <%= website.group %> group</h3>
-        <% } %>
-        <a href="<%= website.url %>" target="_blank">Visit the site</a>
-        <% if(typeof website != "undefined"){ %>
-            <% let datePieces = website.liveDate.toISOString().split("T")[0].split("-"); let day = parseInt(datePieces[2])+1; if(day < 10)day = "0"+day; %>
-            <h4 id="liveDate">Live since <%= `${day}/${datePieces[1]}/${datePieces[0]}` %></h4>
-        <% } %>
-    </div>
+    <h1><%= website.name %></h1>
+    <p>Scroll through this template's home page, shown below, to find out what the design looks like on different devices</p>
     <div id="imageContainer" class="flex-row">
         <% let defPath = "/images/temp.png"; %>
         <div class="imageHolder" id="tabletHolder">
             <div class="imageScroller">
-                <img src="<%= (typeof website != "undefined"?`/images/sites/${website.imageFileNames[1]}`:`${defPath}`)%>" draggable="false">
+                <img src="<%= (typeof website != "undefined"?`/images/sites/${website.imageFileNames[1]}`:`${defPath}`)%>" draggable="false" alt="Tablet design for <%= website.name %>">
             </div>
-            <img id="tabletTemplate" src="/images/tabletFrame.png" draggable="false">
+            <img id="tabletTemplate" src="/images/tabletFrame.png" draggable="false" alt="Tablet Frame">
         </div>
         <div class="imageHolder" id="desktopHolder">
             <div class="imageScroller">
-                <img src="<%= (typeof website != "undefined"?`/images/sites/${website.imageFileNames[0]}`:`${defPath}`)%>" draggable="false">
+                <img src="<%= (typeof website != "undefined"?`/images/sites/${website.imageFileNames[0]}`:`${defPath}`)%>" draggable="false" alt="Desktop design for <%= website.name %>">
             </div>
-            <img id="desktopTemplate" src="/images/desktopFrame.png" draggable="false">
+            <img id="desktopTemplate" src="/images/desktopFrame.png" draggable="false" alt="Desktop Frame">
         </div>
         <div class="imageHolder" id="mobileHolder">
             <div class="imageScroller">
-                <img src="<%= (typeof website != "undefined"?`/images/sites/${website.imageFileNames[2]}`:`${defPath}`)%>" draggable="false">
+                <img src="<%= (typeof website != "undefined"?`/images/sites/${website.imageFileNames[2]}`:`${defPath}`)%>" draggable="false" alt="Mobile design for <%= website.name %>">
             </div>
-            <img id="mobileTemplate" src="/images/mobileFrame.png" draggable="false">
+            <img id="mobileTemplate" src="/images/mobileFrame.png" draggable="false" alt="Mobile Frame">
         </div>
     </div>
-    <div class="flex-column" id="pageContainer">
-        <h3>Page List</h3>
-        <div id="pageList">
-            <% website.pageList.forEach(item =>{ %>
-                <h4><%= item %></h4> 
-            <%})%>
-        </div>
+    <% if(typeof website != "undefined"){ %>
+        <a href="<%= website.url %>" target="_blank" rel="noreferrer">Visit the site</a>
+        <p id="stars">⭐<span>⭐</span>⭐</p>
+        <p id="learnMoreButton">Learn More</p>
+    <% } %>
+    <div class="flex-column" id="infoContainer">
+        <% if(typeof website != "undefined" && inGroup.includes(website.type)){ %>
+            <h3 id="groupString">Part of the <%= website.group %> group</h3>
+        <% } %>
+        <% if(typeof website != "undefined"){ %>
+            <% let datePieces = website.liveDate.toISOString().split("T")[0].split("-"); let day = parseInt(datePieces[2])+1; if(day < 10)day = "0"+day; %>
+            <h4 id="liveDate">Live since <%= `${day}/${datePieces[1]}/${datePieces[0]}` %></h4>
+        <% } %>
+            <div class="flex-column" id="pageContainer">
+            <h3>Page List</h3>
+            <div id="pageList">
+                <% website.pageList.forEach(item =>{ %>
+                    <p><%= item %></p> 
+                    <%})%>
+                </div>
+            </div>
+            <div class="flex-column" id="featureContainer">
+                <h3>Template Features</h3>
+                <h4 id="infoString">Select a feature to learn more</h4>
+                <div id="featureList">
+                <% website.featureList.forEach(item =>{ %>
+                    <p class="feature"><%= item %></p> 
+                    <%})%>
+                </div>
+                <p id="disclaimer">Pages and Features shown are not limited to this design</p>
+            </div>
     </div>
-    <div class="flex-column" id="featureContainer">
-        <h3>Template Features</h3>
-        <div id="featureList">
-            <% website.featureList.forEach(item =>{ %>
-                <h4 class="feature"><%= item %></h4> 
-            <%})%>
-        </div>
-    </div>
-    <div id="disclaimer">Pages and Features shown are not limited to this design</div>
 </div>
-<div id="footer"><h3>A <a href="https://travelbookgroup.com/" target="_blank">Travelbook Group</a> Production</h3></div>
-<div id="floatingText" class="flex-column">
-    <h3>Image quality is not indicative of the final website design<br>Please <a href="<%= website.url %>" target="_blank">visit</a> the site to see it in high definition</h3>
-    <h5 id="dontShow">Don't show again</h5>
-</div>
-<div id="floatingButton" class="flex-column">
-    <button id="closeTemplate" role="button">Close</button>
-</div>
+<div id="footer"><p>A <a href="https://travelbookgroup.com/" target="_blank" rel="noreferrer">Travelbook Group</a> Template</p></div>
 
 <div class="flex-column raisedDiv" id="offScreenRight">
     <button id="closeSidebar">❌</button>
@@ -77,85 +80,6 @@
 </div>
 
 <script>
-let cookies = document.cookie.split(";");
-let showDontShow = true;
-let showElement = document.getElementById("dontShow");
-if(cookies.filter(item=>item.trim().startsWith(`showDontShow`)).length){
-    showDontShow = false;
-}
-if(showDontShow){
-    showElement.addEventListener("click", (e)=>{
-        e.stopPropagation();
-        document.cookie = `showDontShow=true; path=/;`;
-        showDontShow = false;
-        floatingText.style.transform = floatingTransformDefault;
-    });
-}
-
-let body = document.querySelector("body");
-let overlay = document.getElementById("overlay");
-let isOverlay = false;
-let floatingText = document.getElementById("floatingText");
-let floatingButton = document.getElementById("floatingButton");
-floatingButton.getElementsByTagName("button")[0].addEventListener("click", ()=>closeTemplate());
-let imageScrollers = document.getElementsByClassName("imageScroller");
-let imageHolders = document.getElementsByClassName("imageHolder");
-for(let i = 0; i < imageHolders.length; i++){
-    imageScrollers[i].addEventListener("click", (e)=>{
-        e.stopPropagation();
-        if(isSidebarOpen)closeSidebar();
-        moveTemplate(i)
-    });
-}
-
-let currentChoice;
-let defaultTransform = `scale(1) translate(0,0)`;
-let dimensions = [
-    [90,100],
-    [45,85],
-    [20,100]
-];
-let zIndexs = [2,1,2];
-let floatingTransformDefault = `scale(0) translate(-50%, -10vh)`;
-let floatingTransformActive = `scale(1) translate(-50%, 0vh)`;
-
-reset = target =>{
-    if(target == null)return;
-    if(typeof target == "undefined")return;
-    //imageHolders[target].style.transform = defaultTransform;
-    imageHolders[target].style.zIndex = zIndexs[target];
-}
-
-moveTemplate = index =>{
-    overlay.style.display = "block";
-    document.body.style.top = `-${window.scrollY}px`;
-    document.body.style.position = 'fixed';
-    isOverlay = true;
-    reset(currentChoice);
-    //imageHolders[index].style.transform = transforms[index];
-    imageHolders[index].style.zIndex = 90;
-    currentChoice = index;
-    if(showDontShow)floatingText.style.transform = floatingTransformActive;
-    floatingButton.style.transform = `scale(1)`;
-}
-
-closeTemplate = () =>{
-    reset(currentChoice);
-    isOverlay = false;
-    overlay.style.display = "none";
-    currentChoice = null;
-    if(showDontShow)floatingText.style.transform = floatingTransformDefault;
-    floatingButton.style.transform = `scale(0)`;
-    const scrollY = document.body.style.top;
-    document.body.style.position = '';
-    document.body.style.top = '';
-    window.scrollTo(0, parseInt(scrollY || '0') * -1);
-}
-
-document.addEventListener("click", () =>{
-    if(isOverlay)closeTemplate();
-});
-
 let yOffset = -30;
 let sidebar = document.getElementById("offScreenRight");
 sidebar.addEventListener("click", (e)=>e.stopPropagation());
@@ -204,6 +128,20 @@ findTarget = (ele) =>{
 document.addEventListener("click", ()=>{
     if(isSidebarOpen)closeSidebar();
 });
+
+let isInfoShown = false;
+let learnMoreButton = document.getElementById("learnMoreButton");
+learnMoreButton.addEventListener("click", ()=>{
+    if(!isInfoShown)showInfo();
+})
+
+showInfo = () =>{
+    let cont = document.getElementById("infoContainer");
+    cont.style.display = "flex";
+    setTimeout(()=>{cont.style.transform = "scaleY(1)"; window.scrollBy({top:500, left:0, behavior:"smooth"})},100);
+    learnMoreButton.style.display = "none";
+    isInfoShown = true;
+}
 
 </script>
 

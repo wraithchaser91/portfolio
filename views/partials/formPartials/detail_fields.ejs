@@ -47,4 +47,8 @@
         <div class="flex-column"><label for="fileName">File Name</label><input type="text" name="fileName" value="<%= (typeof website != "undefined"?website.fileName:"") %>" id="fileName" required autocomplete="off"></div>
         <div class="flex-column"><label for="liveDate">Live Date</label><input type="text" name="liveDate" value="<%= (typeof website != "undefined"?website.liveDate:"") %>" id="liveDate" readonly></div>
     </div>
+    <div class="flex-column">
+        <label for="description">Template Description</label>
+        <textarea cols=50 rows=5 name=description required><%= typeof website=="undefined"?"":website.description %></textarea>
+    </div>
 </div>

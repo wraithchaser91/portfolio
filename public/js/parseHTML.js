@@ -11,7 +11,10 @@ createAnchor = (link,isBlank,text) => {
     a.appendChild(node);
     a.href=link;
     a.className="internalLink";
-    if(isBlank==1)a.setAttribute('target', '_blank');
+    if(isBlank==1){
+        a.setAttribute('target', '_blank');
+        a.setAttribute('rel', 'noreferrer');
+    }
     return a;
 }
 createTextNode = text =>{

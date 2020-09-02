@@ -50,15 +50,6 @@ typeSelect.addEventListener("change", ()=>{
 
 let hotelNameEle = document.getElementById("hotelName");
 let fileNameEle = document.getElementById("fileName");
-// let primaryHeader = document.getElementById("primaryHeader");
-// if(hotelNameEle.value != "")primaryHeader.textContent = hotelNameEle.value;
-// hotelNameEle.addEventListener("blur", ()=>{
-//     if(!fileNameEle.readOnly)fileNameEle.value = sanitize(hotelNameEle.value.toLowerCase());
-//     primaryHeader.textContent = hotelNameEle.value;
-// });
-// sanitize = string =>{
-//     return string.replace(/[^a-z]/g, "");
-// }
 
 let form = document.getElementById("newSiteForm");
 form.addEventListener("submit", (e)=>{

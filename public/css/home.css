@@ -3,22 +3,6 @@ body{
     overflow-y: auto;
 }
 
-body::before{
-    content: '';
-    position: fixed;
-    background-image: url(/images/background.jpg);
-    width: 100%;
-    height: 100%;
-    top: 0 ;
-    left: 0;
-    background-position: 63% 63%;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-size: cover;
-    filter: brightness(0.05);
-    z-index: -1;
-}
-
 header{
     width:100vw;
     padding:2rem 3rem;
@@ -54,7 +38,7 @@ p{
 
 .card{
     position: relative;
-    width:25vw;
+    width:450px;
     margin:2rem 4rem;
     z-index: 1;
     text-align: right;

@@ -70,11 +70,10 @@ form{
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    position: absolute; 
     width:100%;
 }
 
-form input, form select{
+form input, form select, form textArea{
     padding:0.5vh 0.4vw;
     margin-bottom:2vh;
     border-radius: 8px;
@@ -82,8 +81,9 @@ form input, form select{
     text-align-last: center;
 }
 
-form input:focus, form select:focus{
-    outline:none;
+form textArea{
+    text-align: left;
+    text-align-last: left;
 }
 
 form label{
@@ -163,6 +163,7 @@ a:hover{
 
 .websiteTemplate .flex-row{
     width: 100%;
+    align-items: center;
 }
 
 .websiteTemplate h3{

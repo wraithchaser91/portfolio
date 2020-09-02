@@ -3,20 +3,20 @@
     <h1>Travelbook Group Templates</h1>
     <p>We here at The Travelbook Group take great pride in the websites that we create.</p>
     <p>We listen to what it is you want and then use our expertise and past experiences to create something that is unique to you.</p>
-    <p>Whether it be a completely new design or ideas taken from another source it does not matter, we know how to make it into something that you will be proud to call your own.</p>
+    <p>Whether it be a completely new design or ideas adapted from another source it does not matter, we know how to make it into something that you will be proud to call your own.</p>
     <h2>Our templates - Your masterpiece</h2>
 </header>
 <section class="flex-column">
     <div class="flex-row">
-        <%websites.forEach(item=>{%>
-            <div class="card" style="--bannerColour:<%= item.primaryColour %>">
-                <img src="/images/sites/<%= item.imageFileNames[3] %>" alt="Background image for <%= item.name %>" class="cardImg">
+        <%for(let i = 0; i < websites.length; i++){%>
+            <div class="card" style="--bannerColour:<%= websites[i].primaryColour %>">
+                <img loading="<%=i <= 6 ?"eager":"lazy"%>" src="/images/sites/<%= websites[i].imageFileNames[3] %>" alt="Background image for <%= websites[i].name %>" class="cardImg">
                 <div class="cardBody">
-                    <h3 class="cardTitle"><%= item.name %></h3>
-                    <p class="cardText"><%= item.description %></p>
-                    <a href="<%= `/site/${item.name.replace(/ /g, "").toLowerCase()}` %>" class="cardLink">View This Template</a>
+                    <h3 class="cardTitle"><%= websites[i].name %></h3>
+                    <p class="cardText"><%= websites[i].description %></p>
+                    <a href="<%= `/site/${websites[i].name.replace(/ /g, "").toLowerCase()}` %>" class="cardLink">View This Template</a>
                 </div>
             </div>
-        <%})%>
+        <%}%>
     </div>
 </section>

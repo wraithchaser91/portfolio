@@ -15,7 +15,7 @@ const upload = multer({
     callback(null, imageMimeTypes.includes(file.mimetype))
   }
 })
-let imageNameFields = ["desktopImage", "tabletImage", "mobileImage", "backgroundImage", "logo"];
+let imageNameFields = ["desktopImage", "tabletImage", "mobileImage", "backgroundImage"];
 let imageArrayFields = [];
 for(let imageName of imageNameFields){
     imageArrayFields.push({name: imageName});
@@ -31,7 +31,7 @@ router.get("/", (req,res)=>{
 router.get("/websitemodels", async(req, res)=>{
     let websites = [];
     try{
-        websites = await Website.find({});
+        websites = await Website.find({}).sort({name:1}).exec();
     }catch(e){
         if(errorLog(e,req,res,"Error getting all website models","/admin"))return;
     }
@@ -39,7 +39,7 @@ router.get("/websitemodels", async(req, res)=>{
 });
 
 router.get("/new", (req, res)=>{
-    render(req,res,"admin/new",{css:["/admin/main","/admin/new"], fonts});
+    render(req,res,"admin/new",{css:["/admin/main","/admin/new"]});
 });
 
 router.post("/new", upload.fields(imageArrayFields), async(req, res)=>{
@@ -56,7 +56,7 @@ router.post("/new", upload.fields(imageArrayFields), async(req, res)=>{
         website.imageFileNames = fileNames;
         if(test){
             removeFileNames(fileNames);
-            render(req,res,"admin/new",{css:["/admin/main", "/admin/new"], website, message:`A model with the same ${(isName?'hotel':'file')} name already exists`, fonts});
+            render(req,res,"admin/new",{css:["/admin/main", "/admin/new"], website, message:`A model with the same ${(isName?'hotel':'file')} name already exists`});
             return;
         }else{
             await website.save();
@@ -76,7 +76,7 @@ router.get("/update/:id", async(req,res) =>{
     }catch(e){
         if(errorLog(e,req,res,"Error finding models to update","/admin/websitemodels"))return;
     }
-    render(req,res,"admin/update",{css:["admin/main", "admin/new"], website, fonts});
+    render(req,res,"admin/update",{css:["admin/main", "admin/new"], website});
 });
 
 router.post("/update/:id", async(req,res) =>{
@@ -262,6 +262,7 @@ createWebsite = body =>{
 }
 
 updateSite = (site, body) =>{
+    console.log("saving");
     site.name = body.name;
     site.url = body.url;
     site.howItWasMade = body.howItWasMade;
@@ -277,7 +278,7 @@ updateSite = (site, body) =>{
         site.group = body.group;
     }
     addFiles(site.pageList, site.featureList, (groupActiveOn.includes(body.type)?site.group:null));
-
+    console.log(site);
     return site;
 }
 

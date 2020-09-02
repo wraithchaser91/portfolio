@@ -13,15 +13,29 @@ body::before{
     filter:blur(5px) brightness(0.25);
 }
 
-#overlay{
-    position: fixed;
-    top: 0;
-    left: 0;
-    background-color: #121212ee;
-    width: 100vw;
-    height: 100vh;
-    z-index: 10;
-    display: none;
+header{
+    position: sticky;
+    top:0;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width:100vw;
+}
+
+header a{
+    font-size: 1em;
+    padding:1rem;
+    color:#ccc;
+}
+
+header a:hover{
+    color:white;
+}
+
+p{
+    color:#ccc;
+    font-size: 0.9em;
 }
 
 #mainContainer{
@@ -30,7 +44,8 @@ body::before{
     border-radius: var(--border-radius);
     position: relative;
     justify-content: flex-start;
-    padding:1rem 3rem;
+    padding:0 3rem 1rem;
+    margin-top: -3rem;
     overflow: hidden;
 }
 
@@ -41,16 +56,21 @@ h1{
     position: relative;
 }
 
-a{
+a,#learnMoreButton{
     color:var(--secondaryColour);
     font-family: 'Oswald', sans-serif;
     text-decoration: none;
-    font-size: 1.2em;
-    margin-bottom: 0.5rem;
+    font-size: 1.5em;
     z-index: 2;
+    cursor: pointer;
 }
 
-a:hover{
+#learnMoreButton{
+    font-size: 1em;
+    color:#ccc;
+}
+
+a:hover,#learnMoreButton:hover{
     color:var(--mainColour);
 }
 
@@ -71,7 +91,6 @@ a:hover{
 }
 
 #nextTemplate img, #prevTemplate img{
-    width: 2.2vw;
     cursor: pointer;
 }
 
@@ -81,22 +100,16 @@ a:hover{
 
 #nextTemplate h3, #prevTemplate h3{
     cursor: pointer;
+    color:#ccc;
+}
+
+#nextTemplate:hover h3, #prevTemplate:hover h3{
+    color:white;
 }
 
 .pagination{
     cursor: pointer;
-}
-
-#groupString{
-    color:white;
-    font-size: 1.4em;
-    margin-bottom: 0.5rem;
-}
-
-#liveDate{
-    color:white;
-    font-size: 0.8em;
-    margin: 0 0 1vh 0vw;
+    align-items: center;
 }
 
 #imageContainer{
@@ -168,32 +181,48 @@ a:hover{
 
 #imageContainer .imageScroller{
     position: absolute;
-    top: 2.8vh;
+    top: 4.2vh;
     overflow-y: auto;
 }
 
 #imageContainer #tabletHolder .imageScroller{
-    top:0.8vh;
-    width: 94%;
+    top:1.3vh;
+    width: 93.6%;
     left: 3%;
-    height: 51.6%;
+    height: 51.5%;
 }
 
 #imageContainer #desktopHolder .imageScroller{
     width: 91%;
-    left: 4.5%;
-    height: 66.5%;
+    left: 4.4%;
+    height: 68%;
 }
 
 #imageContainer #mobileHolder .imageScroller{
-    top: 3.25vh;
-    width: 87.2%;
+    top: 5.2vh;
+    width: 87%;
     left: 6.6%;
-    height: 46.2%;
+    height: 45.8%;
 }
 
-.imageScroller img{
-    cursor: pointer;
+#infoContainer{
+    width:60vw;
+    transition: transform 0.3s;
+    transform-origin: top;
+    transform: scaleY(0);
+    display: none;
+}
+
+#groupString{
+    color:white;
+    font-size: 1.3em;
+    margin-bottom: 0.5rem;
+}
+
+#liveDate{
+    color:white;
+    font-size: 0.8em;
+    margin: 0 0 1vh 0vw;
 }
 
 #pageContainer,
@@ -207,9 +236,16 @@ a:hover{
 #pageContainer h3,
 #featureContainer h3{
     font-family: 'Oswald', sans-serif;
-    font-size:1.3em;
-    margin-bottom:0.5rem;
+    font-size:2em;
+    color:var(--mainColour);
 }
+
+#featureContainer #infoString{
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.8em;
+    color:#ccc;
+}
+
 #pageContainer #pageList,
 #featureContainer #featureList{
     display: flex;
@@ -220,19 +256,20 @@ a:hover{
     width:100%;
 }
 
-#pageList h4,
-#featureList h4{
-    font-size:0.8em;
+#pageList p,
+#featureList p{
+    font-size:1em;
     padding:0.5rem 0.4rem;
+    color:white;
 }
 
-#featureList h4:hover{
+#featureList p:hover{
     color:var(--mainColour);
 }
 
 #disclaimer{
     color:white;
-    font-size: 0.6em;
+    font-size: 0.8em;
     margin: 1.5rem 0;
 }
 
@@ -243,62 +280,13 @@ a:hover{
     padding: 1rem;
 }
 
-#footer h3{
+#footer p{
     color: white;
     font-size: 0.8em;
 }
 
-#floatingText{
-    position: fixed;
-    top:4vh;
-    left:50%;
-    color: white;
-    text-align: center;
-    font-size: 0.9em;
-    transform: scale(0) translate(-50%, -10vh);
-    transition: var(--transitionTime);
-    transform-origin: 0% 50%;
-    z-index: 20;
-}
-
-#floatingText a{
-    text-decoration: none;
-    color:var(--mainColour);
-}
-
-
-#floatingText a:hover{
-    color:var(--secondaryColour);
-}
-
-#floatingText #dontShow{
-    color:white;
-    font-size: 0.8em;
-    cursor: pointer;
-}
-
-#floatingText #dontShow:hover{
-    color:var(--secondaryColour);
-}
-
-#floatingButton{
-    position: fixed;
-    bottom:10vh;
-    z-index: 91;
-    transform: scale(0);
-    transition: var(--transitionTime);
-}
-
-#floatingButton button{
-    border-radius: 8px;
-    padding:5px;
-    min-width: 8vw;
-    border:none;
-    cursor: pointer;
-}
-
-#floatingButton button:hover{
-    color:var(--mainColour);
+#footer a{
+    font-size: 1.5em;
 }
 
 #offScreenRight{
@@ -308,7 +296,7 @@ a:hover{
     width:25vw;
     height:100vh;
     transition: 0.3s;
-    background: linear-gradient(145deg, #1c1d21ff, #17181caa);
+    background: linear-gradient(145deg, #1c1d21ff, #17181cee);
     z-index: 99;
     overflow-y: auto;
     overflow-x: hidden;
@@ -383,4 +371,12 @@ a:hover{
 
 .feature{
     cursor: pointer;
+}
+
+#stars{
+    margin-bottom: 0.5rem;
+}
+
+#stars span{
+    font-size: 1.5em;
 }
