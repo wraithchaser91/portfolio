@@ -10,7 +10,7 @@
     <div class="flex-row">
         <%for(let i = 0; i < websites.length; i++){%>
             <div class="card" style="--bannerColour:<%= websites[i].primaryColour %>">
-                <img loading="<%=i <= 6 ?"eager":"lazy"%>" src="/images/sites/<%= websites[i].imageFileNames[3] %>" alt="Background image for <%= websites[i].name %>" class="cardImg">
+                <img loading="<%=i <= 6 ?"eager":"lazy"%>" src="/images/sites/<%= websites[i].imageFileNames[4] %>" alt="Background image for <%= websites[i].name %>" class="cardImg">
                 <div class="cardBody">
                     <h3 class="cardTitle"><%= websites[i].name %></h3>
                     <p class="cardText"><%= websites[i].description %></p>

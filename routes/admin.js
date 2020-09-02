@@ -15,7 +15,7 @@ const upload = multer({
     callback(null, imageMimeTypes.includes(file.mimetype))
   }
 })
-let imageNameFields = ["desktopImage", "tabletImage", "mobileImage", "backgroundImage"];
+let imageNameFields = ["desktopImage", "tabletImage", "mobileImage", "backgroundImage","smallBG"];
 let imageArrayFields = [];
 for(let imageName of imageNameFields){
     imageArrayFields.push({name: imageName});
