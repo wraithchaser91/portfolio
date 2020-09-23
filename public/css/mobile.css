@@ -1,0 +1,27 @@
+.flex-column{
+    padding:2rem;
+    justify-content: space-between;
+    height:70vh;
+}
+
+h1, h2, p{
+    color:white;
+}
+
+h1{
+    font-size: 2rem;
+}
+
+h2{
+    font-size: 1.1rem;
+}
+
+p{
+    text-align: center;
+    margin:2rem 0;
+}
+
+a{
+    color:#61edff;
+    text-decoration: none;
+}

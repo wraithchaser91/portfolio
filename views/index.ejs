@@ -6,9 +6,6 @@
     <p>Whether it be a completely new design or ideas adapted from another source it does not matter, we know how to make it into something that you will be proud to call your own.</p>
     <h2>Our templates - Your masterpiece</h2>
 </header>
-<section id="previewSection">
-    <img src="/images/sites/<%= websites[1].imageFileNames[0] %>">
-</section>
 <section class="flex-column">
     <div class="flex-row">
         <%for(let i = 0; i < websites.length; i++){%>
@@ -18,39 +15,8 @@
                     <h3 class="cardTitle"><%= websites[i].name %></h3>
                     <p class="cardText"><%= websites[i].description %></p>
                     <a href="<%= `/site/${websites[i].name.replace(/ /g, "").toLowerCase()}` %>" class="cardLink">View This Template</a>
-                    <h4 class="previewText">💻 Preview</h4>
                 </div>
             </div>
         <%}%>
     </div>
 </section>
-
-<%let serverNames = ""%>
-<%for(let i = 0; i < websites.length; i++){%>
-    <%serverNames+=`${websites[i].imageFileNames[0]}${i!=websites.length-1?",":""}`%>
-<%}%>
-
-<script>
-    let previewSection = document.querySelector("#previewSection");
-    let previewSectionImage = document.querySelector("#previewSection img");
-    previewSection.addEventListener("mouseover", ()=>{
-        previewSection.style.transform = "scale(1)";
-    });
-    previewSection.addEventListener("mouseleave", ()=>{
-        previewSection.style.transform = "scale(0)";
-    });
-    let names = "<%=serverNames%>".split(",");
-    showPreview = index =>{
-        parents[index].appendChild(previewSection);
-        previewSectionImage.src = `/images/sites/${names[index]}`;
-        setTimeout(()=>{
-            previewSection.style.transform = "scale(1)";
-        },100);
-    }
-    let parents = [];
-    let previewTags = document.querySelectorAll(".previewText");
-    for(let i = 0; i < previewTags.length; i++){
-        previewTags[i].addEventListener("mouseover", ()=>showPreview(i));
-        parents.push(previewTags[i].parentNode);
-    }
-</script>

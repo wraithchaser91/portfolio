@@ -31,6 +31,11 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+var device = require('express-device');
+app.use(device.capture());
+const {checkPhone} = require("./middleware");
+app.use(checkPhone.unless({path:["/mobile"]}));
+
 const mongoose = require("mongoose");
 mongoose.connect(process.env.DATABASE_URL, {useNewUrlParser:true, useUnifiedTopology:true});
 const db = mongoose.connection;
@@ -42,12 +47,14 @@ const authRouter = require("./routes/auth");
 const adminRouter = require("./routes/admin");
 const ajaxRouter = require("./routes/ajax");
 const siteRouter = require("./routes/site");
+const mobileRouter = require("./routes/mobile");
 const errorRouter = require("./routes/error");
 app.use("/", indexRouter);
 app.use("/auth", authRouter);
 app.use("/admin", adminRouter);
 app.use("/ajax", ajaxRouter);
 app.use("/site", siteRouter);
+app.use("/mobile", mobileRouter);
 app.use("/error", errorRouter);
 
 

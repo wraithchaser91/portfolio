@@ -80,6 +80,13 @@
 </div>
 
 <script>
+//Setting up what device a user is on
+let device = "desktop";
+if(window.matchMedia("(min-width: 768px)").matches && window.matchMedia("(max-width: 1025px)").matches){
+    device = "tablet";
+}else if(window.matchMedia("(max-width: 767px)").matches){
+    device = "mobile";
+}
 let yOffset = -30;
 let sidebar = document.getElementById("offScreenRight");
 sidebar.addEventListener("click", (e)=>e.stopPropagation());
@@ -91,7 +98,7 @@ showSidebar = (target) =>{
     let targetAttr = findTarget(target);
     sidebar.scrollTo({top: targetAttr.pos+yOffset, behavior: 'smooth'});
     targetAttr.target.style.color = "#52dc57";
-    sidebar.style.left = "75vw";
+    sidebar.style.left = `${device=="tablet"?60:75}vw`;
     closeSidebarButton.style.transform = "scale(1) rotate(0)";
     isSidebarOpen = true;
 }

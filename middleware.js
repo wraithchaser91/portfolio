@@ -22,8 +22,19 @@ checkAdmin = (req, res, next) =>{
     }
 }
 
+const unless = require('express-unless');
+checkPhone = (req,res,next)=>{
+    if(req.device.type == "phone"){
+        res.redirect("/mobile");
+    }else{
+        next();
+    }
+}
+checkPhone.unless = unless;
+
 module.exports = {
-    checkAuthentication: checkAuthentication,
-    checkUnAuthenticated: checkUnAuthenticated,
-    checkAdmin: checkAdmin
+    checkAuthentication,
+    checkUnAuthenticated,
+    checkAdmin,
+    checkPhone
 }

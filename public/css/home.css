@@ -170,3 +170,15 @@ p{
 #previewSection img{
     width: 100%;
 }
+
+@media only screen and (min-width:768px) and (max-width:1024px){
+    .card{
+        width:380px;
+    }
+    .cardBody{
+        padding:2rem;
+    }
+    .cardTitle::after{
+        left: calc(100% + 2rem);
+    }
+}
