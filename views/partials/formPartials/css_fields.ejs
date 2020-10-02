@@ -1,6 +1,22 @@
 <div class="flex-column absColumn">
     <div class="flex-row">
-        <div class="flex-column"><h3>Primary Colour</h3><%- include ("../colour_picker_elements")%></div>
-        <div class="flex-column"><h3>Secondary Colour</h3><%- include ("../colour_picker_elements")%></div>
+        <div class="flex-column">
+            <h3>Primary Colour</h3>
+            <div class="flex-row parentColourRow">
+                <div class="flex-column hexColumn">
+                    <label for="primaryColour">Enter Hex Value</label>
+                    <input type="text" class="hexInput" name="primaryColour" id="primaryColour" value="<%= (typeof website != "undefined"?website.primaryColour:"") %>">
+                </div>
+            </div>
+        </div>
+        <div class="flex-column">
+            <h3>Secondary Colour</h3>
+            <div class="flex-row parentColourRow">
+                <div class="flex-column hexColumn">
+                    <label for="secondaryColour">Enter Hex Value</label>
+                    <input type="text" class="hexInput" name="secondaryColour" id="secondaryColour" value="<%= (typeof website != "undefined"?website.secondaryColour:"") %>">
+                </div>
+            </div>
+        </div>
     </div>
 </div>

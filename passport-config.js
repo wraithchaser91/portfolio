@@ -27,7 +27,7 @@ function init(passport){
         try{
             let user = await getUserById(id);
             return done(null, user);
-        }catch{
+        }catch(e){
             return done(null, null);
         }
         
@@ -38,7 +38,7 @@ getUserByName = async name =>{
     try{
         const user =  await User.findOne({name: name}).exec();
         return user;
-    }catch{
+    }catch(e){
         console.log("Failed to find user by name");
         return null;
     }
@@ -48,7 +48,7 @@ getUserById = async id =>{
     try{
         const user =  await User.findById(id);
         return user;
-    }catch{
+    }catch(e){
         console.log("Failed to find user by name");
         return null;
     }

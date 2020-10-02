@@ -27,8 +27,9 @@ router.get("/sort/:sort", async(req,res)=>{
         }else if(sortOn=="features"){
             let allSites = await Website.find({state:0});
             websites = sortArrayByFeatures(allSites);
-        }
-        else{
+        }else if(sortOn=="primaryColour"){
+            websites = await Website.find({state:0}).sort({primarColour:1}).exec();
+        }else{
              websites = await Website.find({state:0}).sort({liveDate:-1}).exec();
         }
         

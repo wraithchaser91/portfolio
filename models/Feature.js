@@ -11,6 +11,6 @@ const featureSchema = new mongoose.Schema({
     isShown:{
         type:Boolean,
         default:false
-    }
+    },
 });
 module.exports = mongoose.model("Feature", featureSchema);

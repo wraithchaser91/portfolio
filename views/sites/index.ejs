@@ -9,7 +9,7 @@
 
 <div id="mainContainer" class="flex-column">
     <h1><%= website.name %></h1>
-    <p>Scroll through this template's home page, shown below, to find out what the design looks like on different devices</p>
+    <p>Scroll through this template's home page, shown below, to find out what the template layout looks like on different devices</p>
     <div id="imageContainer" class="flex-row">
         <% let defPath = "/images/temp.png"; %>
         <div class="imageHolder" id="tabletHolder">
@@ -98,7 +98,7 @@ showSidebar = (target) =>{
     let targetAttr = findTarget(target);
     sidebar.scrollTo({top: targetAttr.pos+yOffset, behavior: 'smooth'});
     targetAttr.target.style.color = "#52dc57";
-    sidebar.style.left = `${device=="tablet"?60:75}vw`;
+    sidebar.style.left = `${device=="tablet"?60:74.5}vw`;
     closeSidebarButton.style.transform = "scale(1) rotate(0)";
     isSidebarOpen = true;
 }

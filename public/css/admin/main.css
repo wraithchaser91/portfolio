@@ -88,7 +88,7 @@ form textArea{
 
 form label{
     margin-bottom:0.3vh;
-    font-size: 0.6em;
+    font-size: 1em;
     color: var(--mainColour);
     text-align: center;
 }
@@ -155,10 +155,19 @@ a:hover{
 
 .websiteTemplate{
     min-width: 20%;
-    background-color: #2223;
-    margin:1vh 0.5vw;
+    background-color: #fff1;
+    margin:1rem;
     border-radius: 8px;
-    padding: 1% 0% 1.5%;
+    padding: 1rem;
+    border: 1px solid#c1c1c188;
+}
+
+.websiteTemplate.inactive{
+    border: 1px solid#ff2222;
+}
+
+.websiteTemplate.draft{
+    border: 1px solid#ff8844;
 }
 
 .websiteTemplate .flex-row{
@@ -173,28 +182,19 @@ a:hover{
     color: var(--mainColour);
 }
 
-.websiteTemplate a{
-    margin: 0 0.2vw;
-    font-size: 0.8em;
+.websiteTemplate form{
+    width: unset;
 }
 
-.websiteTemplate span{
-    width:15px;
-    height:15px;
-    background-color: white;
-    border-radius: 50%;
+.websiteTemplate a, .websiteTemplate form{
+    margin: 0.3rem;
+    font-size: 0.7em;
+    min-width: 120px;
 }
 
-.websiteTemplate .siteActive{
-    background-color: #0f0;
-}
-
-.websiteTemplate .siteDraft{
-    background-color: #ff0;
-}
-
-.websiteTemplate .siteInactive{
-    background-color: #f00;
+.websiteTemplate form button{
+    width:100%;
+    font-size: 1em;
 }
 
 .error{

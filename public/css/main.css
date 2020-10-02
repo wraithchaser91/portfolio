@@ -19,11 +19,6 @@ a{
     cursor: pointer;
 }
 
-::selection{
-    background-color: var(--mainColour);
-    color:white;
-}
-
 body{
     width: 100vw;
     display: flex;
@@ -54,11 +49,10 @@ body{
 }
 
 ::-webkit-scrollbar{
-    width: 0.3em;
+    width: 0.5em;
   }
 
 ::-webkit-scrollbar-track {
-    box-shadow: 0 0 2px #4441;
     background-color:#121212;
 }
    

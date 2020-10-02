@@ -50,6 +50,9 @@ typeSelect.addEventListener("change", ()=>{
 
 let hotelNameEle = document.getElementById("hotelName");
 let fileNameEle = document.getElementById("fileName");
+hotelNameEle.addEventListener("blur", ()=>{
+    fileNameEle.value = hotelNameEle.value.toLowerCase().replace(/ /g, "");
+});
 
 let form = document.getElementById("newSiteForm");
 form.addEventListener("submit", (e)=>{
@@ -73,19 +76,6 @@ startSave = () =>{
         let value = (listNames[i] == "group"?list[0]:JSON.stringify(list));
         input.value = value;
         input.name = listNames[i];
-        input.style.display = "none";
-        form.appendChild(input);
-    }
-
-    let cssNames = ["primaryColour", "secondaryColour"];
-    let cssValues = [
-        window.getComputedStyle(colourDrops[0]).backgroundColor,
-        window.getComputedStyle(colourDrops[1]).backgroundColor
-    ];
-    for(let i = 0; i < cssNames.length; i++){
-        let input = document.createElement("input");
-        input.value = cssValues[i];
-        input.name = cssNames[i];
         input.style.display = "none";
         form.appendChild(input);
     }
@@ -126,24 +116,4 @@ for(let i = 0; i < reqNames.length; i++){
     };
     req.open("GET", `/ajax/data/${reqNames[i]}`, true);
     reqs.push(req);
-}
-
-getColours = string =>{
-    return string.split("rgb(")[1].split(")")[0].replace(/ /g, "").split(",");
-}
-
-let hotelName = document.getElementById("hotelName").value;
-if(hotelName != ""){
-let req = new XMLHttpRequest();
-req.onreadystatechange = function(){
-    if(this.readyState == 4 && this.status == 200){
-        let array = JSON.parse(req.responseText);
-        let colour1 = getColours(array[0]);
-        colourPickers[0].changeColour(colour1[0],colour1[1],colour1[2])
-        let colour2 = getColours(array[1]);
-        colourPickers[1].changeColour(colour2[0],colour2[1],colour2[2])
-    }
-};
-req.open("GET", `/ajax/data/website/cssValues/${document.getElementById("hotelName").value}`);
-reqs.push(req);
 }

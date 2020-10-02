@@ -1,6 +1,4 @@
-if(process.env.NODE_ENV !== "production"){
-    require("dotenv").config();
-}
+require("dotenv").config({path: __dirname + '/.env'});
 
 const express = require("express");
 const app = express();
@@ -10,7 +8,7 @@ app.set("view engine", "ejs");
 app.set("views", __dirname + "/views");
 app.set("layout", "layouts/layout");
 app.use(expressLayouts);
-app.use(express.static("public"));
+app.use(express.static(__dirname + "/public"));
 
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({limit: "10mb", extended: false}));
@@ -49,6 +47,7 @@ const ajaxRouter = require("./routes/ajax");
 const siteRouter = require("./routes/site");
 const mobileRouter = require("./routes/mobile");
 const errorRouter = require("./routes/error");
+
 app.use("/", indexRouter);
 app.use("/auth", authRouter);
 app.use("/admin", adminRouter);
@@ -57,5 +56,7 @@ app.use("/site", siteRouter);
 app.use("/mobile", mobileRouter);
 app.use("/error", errorRouter);
 
+const starRouter = require("./routes/star");
+app.use("/*", starRouter);
 
 app.listen(process.env.PORT || 3000);

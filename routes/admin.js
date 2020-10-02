@@ -15,14 +15,16 @@ const upload = multer({
     callback(null, imageMimeTypes.includes(file.mimetype))
   }
 })
-let imageNameFields = ["desktopImage", "tabletImage", "mobileImage", "backgroundImage","smallBG"];
+let imageNameFields = ["desktopImage", "tabletImage", "mobileImage","backgroundImage","smallBG","smallDesktop"];
 let imageArrayFields = [];
 for(let imageName of imageNameFields){
     imageArrayFields.push({name: imageName});
 }
 const {checkAuthentication} = require("../middleware");
-
 router.use(checkAuthentication);
+//method override
+const methodOverride = require("method-override");
+router.use(methodOverride("_method"));
 
 router.get("/", (req,res)=>{
     render(req,res,"admin",{css:["/admin/main"]});
@@ -39,7 +41,7 @@ router.get("/websitemodels", async(req, res)=>{
 });
 
 router.get("/new", (req, res)=>{
-    render(req,res,"admin/new",{css:["/admin/main","/admin/new"]});
+    render(req,res,"admin/new",{css:["/admin/main","/admin/new"], pikaday:1});
 });
 
 router.post("/new", upload.fields(imageArrayFields), async(req, res)=>{
@@ -76,7 +78,7 @@ router.get("/update/:id", async(req,res) =>{
     }catch(e){
         if(errorLog(e,req,res,"Error finding models to update","/admin/websitemodels"))return;
     }
-    render(req,res,"admin/update",{css:["admin/main", "admin/new"], website});
+    render(req,res,"admin/update",{css:["admin/main", "admin/new"], website, pikaday:1});
 });
 
 router.post("/update/:id", async(req,res) =>{
@@ -150,6 +152,21 @@ router.get("/deactivate", async(req,res)=>{
         }
     }catch(e){
         if(errorLog(e,req,res,"Error deactivating all website models"))return;
+    }
+    res.redirect("/admin/websitemodels");
+});
+
+router.delete("/delete/:id", async(req,res)=>{
+    try{
+        let model = await Website.findById(req.params.id);
+        if(!model || typeof model == "undefined"){
+            errorLog("Error", req,res,"Error deleting model, no model found");
+            res.redirect("/admin/websitemodels");
+            return;
+        }
+        await model.remove();
+    }catch(e){
+        if(errorLog(e,req,res,"Error deleting website model"))return;
     }
     res.redirect("/admin/websitemodels");
 });
@@ -262,7 +279,6 @@ createWebsite = body =>{
 }
 
 updateSite = (site, body) =>{
-    console.log("saving");
     site.name = body.name;
     site.url = body.url;
     site.howItWasMade = body.howItWasMade;
@@ -278,7 +294,6 @@ updateSite = (site, body) =>{
         site.group = body.group;
     }
     addFiles(site.pageList, site.featureList, (groupActiveOn.includes(body.type)?site.group:null));
-    console.log(site);
     return site;
 }
 

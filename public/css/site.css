@@ -186,20 +186,20 @@ a:hover,#learnMoreButton:hover{
 }
 
 #imageContainer #tabletHolder .imageScroller{
-    top:1.3vh;
+    top:2%;
     width: 93.6%;
     left: 3%;
     height: 51.5%;
 }
 
 #imageContainer #desktopHolder .imageScroller{
-    width: 91%;
+    width: 91.15%;
     left: 4.4%;
     height: 68%;
 }
 
 #imageContainer #mobileHolder .imageScroller{
-    top: 5.2vh;
+    top: 7.3%;
     width: 87%;
     left: 6.6%;
     height: 45.8%;
@@ -274,7 +274,7 @@ a:hover,#learnMoreButton:hover{
 }
 
 #footer{
-    position: absolute;
+    position: fixed;
     bottom: 0;
     right: 0;
     padding: 1rem;
@@ -309,7 +309,7 @@ a:hover,#learnMoreButton:hover{
 #offScreenRight #closeSidebar{
     position: fixed;
     top:0.5rem;
-    right: 0.5rem;
+    right: 1.5rem;
     background-color: #0008;
     font-size: 1em;
     border: none;
@@ -330,10 +330,8 @@ a:hover,#learnMoreButton:hover{
 }
 
 #offScreenRight .flex-column{
-    flex:unset;
+    display:block;
     margin-bottom: 2vh;
-    align-items: flex-start;
-    justify-content: flex-start;
 }
 
 #offScreenRight h3{

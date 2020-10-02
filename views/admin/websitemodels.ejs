@@ -8,15 +8,19 @@
         <a href="/admin/activate" class="optionButton">Activate All</a>
     </div>
     <div id="websiteHolder" class="flex-row">
+        <% let siteStates = ["", "draft", "inactive"]; %>
         <% websites.forEach(item =>{%>
-            <div class="websiteTemplate flex-column">
+            <div class="websiteTemplate flex-column <%=siteStates[item.state]%>">
                 <h3><%= item.name %></h3>
-                <div class="flex-row">
-                    <a href="<%= `/admin/update/${item.id}` %>" class="reverseAnchor">Update Details</a>
-                    <a href="<%= `/admin/updateImages/${item.id}` %>" class="reverseAnchor">Update Images</a>
-                    <a href="<%= `/admin/update/state/${item.id}?state=${(item.state == 0?2:0)}` %>" class="reverseAnchor backButton"><%= (item.state==0?"Deactivate":"Activate"); %></a>
-                    <% let siteStates = ["siteActive", "siteDraft", "siteInactive"]; %>
-                    <span class="<%= siteStates[item.state] %>"></span>
+                <div class="flex-column">
+                    <div class="flex-row">
+                        <a href="<%= `/admin/update/${item.id}` %>" class="reverseAnchor">Update Details</a>
+                        <a href="<%= `/admin/updateImages/${item.id}` %>" class="reverseAnchor">Update Images</a>
+                    </div>
+                    <div class="flex-row">
+                        <a href="<%= `/admin/update/state/${item.id}?state=${(item.state == 0?2:0)}` %>" class="reverseAnchor backButton"><%= (item.state==0?"Deactivate":"Activate"); %></a>
+                        <form class="deleteModel" action="/admin/delete/<%=item._id%>?_method=DELETE" method="POST"><button type="submit">Delete</button></form>
+                    </div>
                 </div>
             </div>
         <%})%>

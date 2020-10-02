@@ -1,5 +1,4 @@
 body{
-    background-color: #000;
     overflow-y: auto;
 }
 
@@ -145,30 +144,33 @@ p{
     z-index: -1;
 }
 
-.previewText{
+.previewContainer{
+    position: absolute;
+    bottom:2.2rem;
+    left:1rem;
+    z-index: 90;
+}
+
+.previewContainer p{
     font-family: 'Oswald', sans-serif;
     color:#888;
     font-size: 1em;
-    position: absolute;
-    bottom:2.2rem;
-    left:0.8rem;
+    margin:0;
+    cursor: pointer;
 }
 
-#previewSection{
+.previewContainer img{
     position: absolute;
-    top:-2rem;
+    width: 200px;
+    bottom:1.5rem;
     left:1rem;
-    z-index: 90;
-    width:250px;
-    max-height: 250px;
-    overflow:hidden;
     transform: scale(0);
-    transition: transform 0.3s;
+    transition: 0.3s transform;
     transform-origin: bottom left;
 }
 
-#previewSection img{
-    width: 100%;
+.previewContainer:hover img{
+    transform: scale(1);
 }
 
 @media only screen and (min-width:768px) and (max-width:1024px){

@@ -15,6 +15,10 @@
                     <h3 class="cardTitle"><%= websites[i].name %></h3>
                     <p class="cardText"><%= websites[i].description %></p>
                     <a href="<%= `/site/${websites[i].name.replace(/ /g, "").toLowerCase()}` %>" class="cardLink">View This Template</a>
+                    <div class="previewContainer">
+                        <p>💻Preview</p>
+                        <img src="/images/sites/<%= websites[i].imageFileNames[5]%>" width="200px" alt="Preview image for <%=websites[i].name%>">
+                    </div>
                 </div>
             </div>
         <%}%>
