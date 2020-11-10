@@ -22,9 +22,21 @@
             <%})%>
         <%}%>
     <%}%>
+    <% if(typeof website != "undefined"){%>
+        <style>
+            :root{
+                --mainColour:<%=website.primaryColour%>;
+                --secondaryColour:<%=website.secondaryColour%>;
+            }
+            body::before{
+                background-image:url(/images/sites/<%=website.imageFileNames[3]%>);
+            }
+        </style>
+    <%}%>
 </head>
 <body>
     <script>let reqs = [];</script>
+    <script src="/js/classes.js"></script>
     <%- body %>
     <script>
         setTimeout(()=>{

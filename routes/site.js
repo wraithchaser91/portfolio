@@ -25,12 +25,11 @@ router.get("/:name", async(req, res)=>{
             res.redirect("/error/404");
             return;
         }
-        siteCSS = `sites/${website.fileName}`;
         features = await Feature.find({isShown:true}).sort({name:1}).exec();
     }catch(e){
         if(errorLog(e,req,res,`Could not load the site: ${req.params.id}`, "/error/404"))return;
     }
-    render(req,res,"sites", {css:[...css, siteCSS], website, pagination,features});
+    render(req,res,"sites", {css, website, pagination,features});
 });
 
 module.exports = router;

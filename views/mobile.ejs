@@ -1,7 +1,183 @@
 <section class="flex-column">
-    <img src="images/logo.png">
-    <h1>Mobile Design</h1>
-    <h2>Coming Soon</h2>
-    <p>To see an active version of the portfolio please load it on a tablet or a desktop</p>
-    <a href="https://travelbookgroup.com/" class="button">Visit the Travelbook Group website</a>
+    <img src="images/logo.png" id="logo">
+    <h1>Travelbook Group Templates</h1>
+    <p>We here at The Travelbook Group take great pride in the websites that we create. We listen to what it is you want and then use our expertise and past experiences to create something that is unique to you.</p>
+    <p>Whether it be a completely new design or ideas adapted from another source it does not matter, we know how to make it into something that you will be proud to call your own.</p>
+    <h2>Our templates - Your masterpiece</h2>
+    <p>Choose a template to view more information</p>
 </section>
+<div class="overlay"></div>
+
+<section class="flex-row" id="siteContainer">
+</section>
+<section id="preview">
+    <section id="fullScreenImg">
+        <img src="/images/logo.png" alt="Full screen preview">
+    </section>
+        <button class="backButton" id="previewBackButton">Back</button>
+    </section>
+<button id="moreInfo">More Info</button>
+<a href="#" target="_blank" rel="noreferrer" id="websiteLink">Visit site</a>
+<section class="flex-column" id="moreInfoPanel">
+    <h2 id="websiteName"></h2>
+    <p id="liveDate"></p>
+    <h3>Page List</h3>
+    <ul id="pageList"></ul>
+    <h3>Template Features</h3>
+    <ul id="featureList"></ul>
+    <p>Select a feature to learn more</p>
+    <p>Pages and features are not limited to this design</p>
+</section>
+<button class="backButton" id="closeSidebar">Close</button>
+<div class="flex-column" id="featureSection">
+    <h2>Feature List</h2>
+    <% if(typeof features != "undefined"){ %>
+        <% features.forEach(item=>{ %>
+            <div class="flex-column">
+                <h3 id="<%= `${item.name}Title` %>"><%= item.name %></h3>
+                <p class="featureDescription"><%= (typeof item.description=="undefined"?"No description available":item.description) %></p>
+            </div>
+        <%})%>
+    <%}%>
+</div>
+
+<script>
+    class SiteCard{
+        constructor(item){
+            this.item = item;
+            this.setup();
+        }
+        setup(){
+            this.ele = createElement("div", {classList:"siteCard"});
+            this.src = `/images/sites/${this.item.imageFileNames[2]}`
+            this.image = createElement("img", {src:this.src, alt:`Mobile preview for ${this.item.name}`});
+            this.ele.appendChild(this.image);
+            siteContainer.appendChild(this.ele);
+
+            this.ele.addEventListener("click", ()=>{
+                openPreview(this);
+            })
+        }
+    }
+
+    let siteContainer = document.querySelector("#siteContainer");
+
+    let siteCards = [];
+
+    waiter.open("Loading sites");
+    startGetFetch(`/mobile/sites`, (data)=>{
+        for(let site of data.websites){
+            siteCards.push(new SiteCard(site));
+        }
+    },waiter);
+
+    let activeCard;
+
+    let preview = document.querySelector("#preview");
+    let fullScreenImg = document.querySelector("#fullScreenImg");
+    let changingImage = document.querySelector("#fullScreenImg img");
+    let websiteLink = document.querySelector("#websiteLink");
+    let moreInfo = document.querySelector("#moreInfo");
+    moreInfo.addEventListener("click", ()=>showMore());
+    let moreInfoPanel = document.querySelector("#moreInfoPanel");
+    let previewBackButton = document.querySelector("#previewBackButton");
+    previewBackButton.addEventListener("click", ()=>closePreview());
+    openPreview = card =>{
+        activeCard = card;
+        changingImage.src = card.src;
+        websiteLink.href = card.item.url;
+        preview.style.transform = "translateX(0)";
+        fullScreenImg.scrollTo(0,0);
+        setTimeout(()=>{
+            websiteLink.style.transform = "translateY(0)";
+            moreInfo.style.transform = "translateY(0)";
+            previewBackButton.style.transform = "translateY(0)";
+        },750);
+    }
+
+    closePreview = () =>{
+        preview.style.transform = "translateX(100%)";
+        websiteLink.style.transform = "translateY(150%)";
+        moreInfo.style.transform = "translateY(150%)";
+        previewBackButton.style.transform = "translateY(-150%)";
+    }
+
+    let isShowMore = false;
+    let websiteName = document.querySelector("#websiteName");
+    let liveDate = document.querySelector("#liveDate");
+    let pageList = document.querySelector("#pageList");
+    let featureList = document.querySelector("#featureList");
+    showMore = () =>{
+        if(isShowMore){
+            moreInfo.textContent = "More info";
+            moreInfoPanel.style.transform = "translateX(-100%)";
+            closeSidebar();
+        }else{
+            moreInfo.textContent = "Close info";
+            moreInfoPanel.style.transform = "translateX(0)";
+            websiteName.textContent = activeCard.item.name;
+            liveDate.textContent = `Live since: ${activeCard.item.liveDate.split("T")[0]}`;
+            pageList.innerHTML = "";
+            featureList.innerHTML = "";
+            for(let page of activeCard.item.pageList){
+                let li = document.createElement("li");
+                li.textContent = page;
+                pageList.appendChild(li);
+            }
+            for(let page of activeCard.item.featureList){
+                let li = document.createElement("li");
+                li.textContent = page;
+                li.classList = "feature";
+                featureList.appendChild(li);
+            }
+            featurePos = [];
+            let features = document.getElementsByClassName("feature");
+            for(let feature of features){
+                feature.addEventListener("click", (e)=>{
+                    e.stopPropagation();
+                    showSidebar(feature);
+                });
+                let target = document.getElementById(`${feature.textContent}Title`);
+                if(target)featurePos.push({feature:feature, target:target,pos:target.getBoundingClientRect().top});
+             }
+        }
+        isShowMore = !isShowMore;
+    }
+
+    let sidebar = document.querySelector("#featureSection");
+    let closeSidebarButton = document.querySelector("#closeSidebar")
+    let isSidebarOpen = false;
+    closeSidebarButton.addEventListener("click", ()=>closeSidebar());
+    showSidebar = (target) =>{
+        resetColours();
+        let targetAttr = findTarget(target);
+        if(targetAttr){
+            sidebar.scrollTo({top: targetAttr.pos-30, behavior: 'smooth'});
+            targetAttr.target.style.color = "#52dc57";
+        }
+        sidebar.style.transform = "translateX(0)";
+        closeSidebarButton.style.transform = "scale(1)";
+        isSidebarOpen = true;
+    }
+    closeSidebar = () =>{
+        sidebar.style.transform = "translateX(100%";
+        closeSidebarButton.style.transform = "scale(0)";
+        isSidebarOpen = false;
+    }
+
+    let featurePos = [];
+    resetColours = () =>{
+        for(let feature of featurePos){
+            feature.target.style.color = "#e1e1e1";
+        }
+    }
+
+    findTarget = (ele) =>{
+        for(let feature of featurePos){
+            if(ele == feature.feature)return feature;
+        }
+        return null;
+    }
+</script>
+
+<script src="../js/parseHTML.js"></script>

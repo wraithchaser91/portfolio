@@ -96,8 +96,10 @@ closeSidebarButton.addEventListener("click", ()=>closeSidebar());
 showSidebar = (target) =>{
     resetColours();
     let targetAttr = findTarget(target);
-    sidebar.scrollTo({top: targetAttr.pos+yOffset, behavior: 'smooth'});
-    targetAttr.target.style.color = "#52dc57";
+    if(targetAttr){
+        sidebar.scrollTo({top: targetAttr.pos+yOffset, behavior: 'smooth'});
+        targetAttr.target.style.color = "#52dc57";
+    }
     sidebar.style.left = `${device=="tablet"?60:74.5}vw`;
     closeSidebarButton.style.transform = "scale(1) rotate(0)";
     isSidebarOpen = true;
@@ -116,7 +118,7 @@ for(let feature of features){
         showSidebar(feature);
     });
     let target = document.getElementById(`${feature.textContent}Title`);
-    featurePos.push({feature:feature, target:target,pos:target.getBoundingClientRect().top});
+    if(target)featurePos.push({feature:feature, target:target,pos:target.getBoundingClientRect().top});
 }
 
 resetColours = () =>{

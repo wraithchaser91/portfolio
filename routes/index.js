@@ -1,18 +1,39 @@
 const express = require("express");
 const router = express.Router();
 const Website = require("../models/Website");
+const {checkPhone} = require("../middleware");
 const {errorLog, render} = require("../utils");
 let css = ["home"];
 
-router.get("/", async(req, res)=>{
+router.get("/", checkPhone, async(req, res)=>{
     let websites;
     try{
-        websites = await Website.find({state:0}).sort({liveDate:-1}).exec();
+        websites = await Website.find({state:0}).sort({liveDate:-1}).limit(12).exec();
         
     }catch(e){
         if(errorLog(e,req,res,"Could not load the sites", "/error/404"))return;
     }
     render(req,res,"index",{css,websites});
+});
+
+router.get("/loadmore", async(req,res)=>{
+    let obj = {
+        status: 200,
+        statusText: "OK",
+        ok:true
+    }
+    try{
+        let skip = parseInt(req.query.skip);
+        let limit = parseInt(req.query.limit);
+        let list = await Website.find({state:0}).sort({liveDate:-1}).skip(skip).limit(limit).exec();
+        obj.data = list;
+    }catch(e){
+        console.log(e);
+        obj.status = 500;
+        obj.statusText = `${e}`;
+        obj.ok = false;
+    }
+    res.send(obj);
 });
 
 router.get("/sort/:sort", async(req,res)=>{

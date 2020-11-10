@@ -7,7 +7,7 @@ const {errorLog, render} = require("../utils");
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
-const uploadPath = path.join('public', 'images/sites');
+const uploadPath = path.join(__dirname.split("routes")[0], 'public', 'images', 'sites');
 const imageMimeTypes = ['image/jpeg', 'image/png', 'images/gif'];
 const upload = multer({
   dest: uploadPath,
@@ -54,7 +54,7 @@ router.post("/new", upload.fields(imageArrayFields), async(req, res)=>{
             test = await Website.findOne({fileName:req.body.fileName});
             isName = false;
         }
-        website = createWebsite(req.body);
+        website = createWebsite(req,res,req.body);
         website.imageFileNames = fileNames;
         if(test){
             removeFileNames(fileNames);
@@ -62,7 +62,6 @@ router.post("/new", upload.fields(imageArrayFields), async(req, res)=>{
             return;
         }else{
             await website.save();
-            await saveCSS(website);
         }
     }catch(e){
         removeFileNames(fileNames);
@@ -84,9 +83,8 @@ router.get("/update/:id", async(req,res) =>{
 router.post("/update/:id", async(req,res) =>{
     try{
         let website = await Website.findById(req.params.id);
-        website = updateSite(website, req.body);
+        website = updateSite(req,res,website, req.body);
         await website.save();
-        await saveCSS(website);
     }catch(e){
         if(errorLog(e,req,res,"Error updating model"))return;
     }
@@ -123,7 +121,6 @@ router.post("/updateImages/:id", upload.fields(imageArrayFields), async(req,res)
         removeFileNames(website.imageFileNames);
         website.imageFileNames = getFileNames(req.files);
         await website.save();
-        await saveCSS(website);
     }catch(e){
         if(errorLog(e,req,res,"Error updating images"))return;
     }
@@ -250,13 +247,13 @@ removeFileNames = array =>{
     for(let fileName of array){
         if(fileName == "" || !fileName)continue;
         fs.unlink(path.join(uploadPath, fileName), err => {
-            if (err) console.log("Error removing files");
+            if (err) console.log(`Error removing files: ${err}`);
         })
     }
 }
 
 let groupActiveOn = ["Multi Site", "Group Site", "Landing Page"];
-createWebsite = body =>{
+createWebsite = (req,res,body) =>{
     let website = new Website({
         name: body.name,
         url: body.url,
@@ -274,11 +271,11 @@ createWebsite = body =>{
     if(groupActiveOn.includes(body.type)){
         website.group = body.group;
     }
-    addFiles(website.pageList, website.featureList, (groupActiveOn.includes(body.type)?website.group:null));
+    addFiles(req,res,website.pageList, website.featureList, (groupActiveOn.includes(body.type)?website.group:null));
     return website;
 }
 
-updateSite = (site, body) =>{
+updateSite = (req,res,site, body) =>{
     site.name = body.name;
     site.url = body.url;
     site.howItWasMade = body.howItWasMade;
@@ -293,7 +290,7 @@ updateSite = (site, body) =>{
     if(groupActiveOn.includes(body.type)){
         site.group = body.group;
     }
-    addFiles(site.pageList, site.featureList, (groupActiveOn.includes(body.type)?site.group:null));
+    addFiles(req,res,site.pageList, site.featureList, (groupActiveOn.includes(body.type)?site.group:null));
     return site;
 }
 
@@ -305,7 +302,7 @@ let retList = ["Accommodation", "Home"]
 
 addToList = (list, item) => !list.includes(item);
 
-addFiles = async(pageList, featureList, group) =>{
+addFiles = async(req,res,pageList, featureList, group) =>{
     try{
         let prefs = await Preferences.findOne();
         let prefPages = prefs.pageList;
@@ -339,21 +336,6 @@ addFiles = async(pageList, featureList, group) =>{
         await prefs.save();
     }catch(e){
         if(errorLog(e,req,res,"Error adding files"))return;
-    }
-}
-
-createCSS = (website) =>{ 
-    let css ="";
-    css+=`:root{--mainColour:${website.primaryColour};--secondaryColour:${website.secondaryColour};}`;
-    css+=`body::before{background-image:url(/images/sites/${website.imageFileNames[3]});}`;
-    return css;
-}
-
-saveCSS = async(website) =>{
-    try{
-        await fs.promises.writeFile(`../Portfolio/public/css/sites/${website.fileName}.css`, createCSS(website));
-    }catch(e){
-        if(errorLog(e,req,res,"Could not save CSS"))return;
     }
 }
 

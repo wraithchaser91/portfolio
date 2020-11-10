@@ -34,7 +34,7 @@ body::before{
     position: fixed;
     width: 100%;
     height:100%;
-    background-image: url("/images/aurora.jpg");
+    background-image: url("/images/background.jpg");
     background-repeat: no-repeat;
     background-position: bottom;
     background-size: cover;
@@ -55,7 +55,7 @@ body::before{
 }
 
 #mainContainer{
-    width: 80vw;
+    width: 90vw;
     position: relative;
     justify-content: flex-start;
     margin-top: 2vh;
@@ -117,11 +117,11 @@ button, a{
 }
 
 .reverseAnchor:hover{
-    color:black;
+    filter: hue-rotate(210deg);
 }
 
 form button:hover{
-    filter: hue-rotate(180deg);
+    filter: hue-rotate(30deg);
 }
 
 a:hover{
@@ -150,11 +150,11 @@ a:hover{
 }
 
 #websiteHolder{
-    width:95%
+    width:100%
 }
 
 .websiteTemplate{
-    min-width: 20%;
+    min-width: 18%;
     background-color: #fff1;
     margin:1rem;
     border-radius: 8px;
@@ -176,10 +176,11 @@ a:hover{
 }
 
 .websiteTemplate h3{
-    font-size:0.9em;
+    font-size:1.2em;
     margin-bottom: 1vh;
-    font-weight: lighter;
+    font-weight: 400;
     color: var(--mainColour);
+    font-family: 'Oswald', sans-serif;
 }
 
 .websiteTemplate form{

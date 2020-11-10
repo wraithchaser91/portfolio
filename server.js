@@ -1,3 +1,5 @@
+const hostname = __dirname;
+
 require("dotenv").config({path: __dirname + '/.env'});
 
 const express = require("express");
@@ -31,8 +33,6 @@ app.use(passport.session());
 
 var device = require('express-device');
 app.use(device.capture());
-const {checkPhone} = require("./middleware");
-app.use(checkPhone.unless({path:["/mobile"]}));
 
 const mongoose = require("mongoose");
 mongoose.connect(process.env.DATABASE_URL, {useNewUrlParser:true, useUnifiedTopology:true});
@@ -55,8 +55,5 @@ app.use("/ajax", ajaxRouter);
 app.use("/site", siteRouter);
 app.use("/mobile", mobileRouter);
 app.use("/error", errorRouter);
-
-const starRouter = require("./routes/star");
-app.use("/*", starRouter);
 
 app.listen(process.env.PORT || 3000);

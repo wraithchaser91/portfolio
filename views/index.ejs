@@ -7,7 +7,7 @@
     <h2>Our templates - Your masterpiece</h2>
 </header>
 <section class="flex-column">
-    <div class="flex-row">
+    <div class="flex-row" id="websiteRow">
         <%for(let i = 0; i < websites.length; i++){%>
             <div class="card" style="--bannerColour:<%= websites[i].primaryColour %>">
                 <img loading="<%=i <= 6 ?"eager":"lazy"%>" src="/images/sites/<%= websites[i].imageFileNames[4] %>" alt="Background image for <%= websites[i].name %>" class="cardImg">
@@ -17,10 +17,84 @@
                     <a href="<%= `/site/${websites[i].name.replace(/ /g, "").toLowerCase()}` %>" class="cardLink">View This Template</a>
                     <div class="previewContainer">
                         <p>💻Preview</p>
-                        <img src="/images/sites/<%= websites[i].imageFileNames[5]%>" width="200px" alt="Preview image for <%=websites[i].name%>">
+                        <img loading="<%=i <= 6 ?"eager":"lazy"%>" src="/images/sites/<%= websites[i].imageFileNames[5]%>" width="200px" alt="Preview image for <%=websites[i].name%>">
                     </div>
                 </div>
             </div>
         <%}%>
     </div>
 </section>
+
+<script>
+    let skip = 12;
+    let limit = 12;
+    let isMore = true, canAdd=true;
+    let websiteRow = document.querySelector("#websiteRow");
+
+    loadMore = () =>{
+        waiter.open("Loading sites");
+        startGetFetch(`/loadmore?skip=${skip}&limit=${limit}`, (data)=>{
+            addNewSites(data.data);
+        },waiter)
+    }
+
+    addNewSites = list =>{
+        for(let item of list){
+            createNewCard(item)
+        }
+
+        if(list.length == limit){
+            skip+=limit;
+            canAdd = true;
+        }
+    }
+
+    createNewCard = ({primaryColour, imageFileNames, name, description}) =>{
+        let container = document.createElement("div");
+        container.classList = "card";
+        container.style.setProperty("--bannerColour", primaryColour);
+        let bgImage = document.createElement("img");
+        bgImage.src = `images/sites/${imageFileNames[4]}`;
+        bgImage.alt = `Background image for ${name}`;
+        bgImage.classList = "cardImg";
+        let cardBody = document.createElement("div");
+        cardBody.classList = "cardBody";
+        let cardTitle = document.createElement("h3");
+        cardTitle.classList = "cardTitle";
+        cardTitle.textContent = name;
+        let cardDesc = document.createElement("p");
+        cardDesc.classList = "cardText";
+        cardDesc.textContent = description;
+        let link = document.createElement("a");
+        link.href = `/site/${name.replace(/ /g, "").toLowerCase()}`;
+        link.classList = "cardLink";
+        link.textContent = "View This Template";
+        let previewContainer = document.createElement("div");
+        previewContainer.classList = "previewContainer";
+        let p = document.createElement("p");
+        p.textContent = "💻Preview";
+        let prevImage = document.createElement("img");
+        prevImage.src = `/images/sites/${imageFileNames[5]}`;
+        prevImage.width = "200px";
+        prevImage.alt = `Preview image for ${name}`;
+        
+        cardBody.appendChild(cardTitle);
+        cardBody.appendChild(cardDesc);
+        cardBody.appendChild(link);
+        
+        previewContainer.appendChild(prevImage);
+        previewContainer.appendChild(p);
+
+        container.appendChild(bgImage);
+        container.appendChild(cardBody);
+        container.appendChild(previewContainer);
+        websiteRow.appendChild(container);
+    }
+
+    document.addEventListener("scroll", ()=>{
+        if(isMore && canAdd && calcPerc() > 90){
+            loadMore();
+            canAdd = false;
+        }
+    });
+</script>

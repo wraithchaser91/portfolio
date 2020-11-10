@@ -111,3 +111,65 @@ body{
     margin:2vh 0;
     padding:1% 2%;
 }
+
+.overlay, .waiterOverlay{
+    width:100vw;
+    height:100vh;
+    background-color: #000a;
+    z-index: 50;
+    position: fixed;
+    top:0;
+    left:0;
+    display: none;
+    margin:0;
+}
+
+.waiterOverlay{
+    background-color: #000c;
+}
+
+.waiterOverlay h2{
+    color:var(--tertiaryColour);
+}
+
+#spinningWheel{
+    --size:80px;
+    position:relative;
+    width:var(--size);
+    height:var(--size);
+    --deg: 0deg;
+    filter:hue-rotate(calc(var(--deg)));
+    transform: rotate(var(--deg));
+}
+
+#spinningWheel::before{
+    content:'';
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    background: conic-gradient(blue, rgb(0, 119, 255), rgb(0, 255, 255), rgb(0, 119, 255), blue);
+    position: absolute;
+    z-index: 5;
+    border-radius: 50%;
+    box-shadow: inset 0px -10px 5px #fff8;
+}
+
+#spinningWheel::after{
+    --size:10%;
+    content:'';
+    top:var(--size);
+    left:var(--size);
+    right:var(--size);
+    bottom:var(--size);
+    background-color: #2d2d2d;
+    border-radius: 50%;
+    position: absolute;
+    z-index: 6;
+}
+
+#spinnerText{
+    color:white;
+    font-size: 1.2rem;
+    margin-top:0.5rem;
+}
